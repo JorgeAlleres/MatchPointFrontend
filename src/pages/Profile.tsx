@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { UserService } from '../services/user.service';
 import { Link, useParams } from 'react-router-dom';
 
