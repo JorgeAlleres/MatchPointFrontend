@@ -1,7 +1,11 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
-import { loginUser } from '../services/authService'
+import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
+import { AuthService } from '../services/auth.service'
 
 function Login() {
+
+  const navigate = useNavigate()
 
   const [form, setForm] = useState(
     {
@@ -9,19 +13,18 @@ function Login() {
       password: ''
     }
   )
-  const [message, setMessage ] = useState('')
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     // mensaje por post al api del backend
-    try{
-      await loginUser(form.email, form.password)
-      console.log('login successfull')
-      setMessage('login successfull')
-      // Redirigir a otra pagina (ofertas)
-    }catch(error){
-      const msg = error instanceof Error ? error.message : 'Error desconocido'
-      setMessage(msg)
+    try {
+      await AuthService.loginUser(form.email, form.password)
+      toast('Login Successful')
+      navigate('/')
+      {/*TODO Detectar si el usuario es admin y enviarlo al home para admins*/}
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : 'Unknown Error'
+      toast(msg)
     }
   }
 
@@ -32,25 +35,53 @@ function Login() {
 
 
   return (
-    <form className="max-w-sm mx-auto min-w-sm" onSubmit={handleSubmit}>
-      <div className="mb-5">
-        <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-        <input type="email" name="email" value={form.email} onChange={handleChange} id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@flowbite.com" required />
-      </div>
-      <div className="mb-5">
-        <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
-        <input type="password" name="password" value={form.password} onChange={handleChange} id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
-      </div>
-      <div className="flex items-start mb-5">
-        <div className="flex items-center h-5">
-          <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
+    <div className="flex items-center justify-center h-screen">
+      <form className="p-6 rounded-lg shadow-md w-80 text-white" onSubmit={handleSubmit}>
+        <h2 className="text-2xl font-bold mb-4 text-center">Iniciar Sesión</h2>
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-sm font-medium">Correo electrónico</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            required
+          />
         </div>
-        <label htmlFor="remember" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
-      </div>
-      <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-      {message}
-    </form>
-
+        <div className="mb-4">
+          <label htmlFor="password" className="block text-sm font-medium">Contraseña</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            required
+          />
+        </div>
+        <div className="flex items-center mb-4">
+          <input
+            type="checkbox"
+            id="remember"
+            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+          />
+          <label htmlFor="remember" className="ml-2 text-sm text-gray-600">Recuérdame</label>
+        </div>
+        {/*TODO Implementar las burbujas para cceder con google, github, ...*/}
+        <button
+          type="submit"
+          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Iniciar Sesión
+        </button>
+        <p className="mt-4 text-center text-sm text-gray-600">
+          ¿No tienes cuenta? <a href="/register" className="text-indigo-600 hover:underline">Regístrate aquí</a>
+        </p>
+      </form>
+    </div>
   )
 }
 
