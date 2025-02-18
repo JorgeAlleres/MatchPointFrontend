@@ -8,7 +8,7 @@ function Navbar() {
   const [msg, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [userId, setUserId] = useState<string | null>(null);
+  //const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
     GameService.getAll()
