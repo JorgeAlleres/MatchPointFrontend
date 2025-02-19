@@ -1,0 +1,59 @@
+Register
+-----------------
+-   Implementar funcionalidad al botón recuérdame
+
+-   Añadir Checkbox para Aceptar/Rechazar notificaciones
+
+Login
+-------------------
+-   Implementar Burbujas de Inicio de sesión con Google y Github
+
+Navbar
+--------------------
+-   Añadir un Link en el Centro a la Página Home/AdminPanel
+-   Si es Admin -> AdminNavbar (CREAR)  // Si es User -> Navbar
+-   Cambiar el Botón de Profile por el nombre de Usuario y una burbuja con el avatar(*Primero en Profile*)
+
+Profile
+----------------
+-   Redireccion al pulsar el Navbar (Deberia redirigir a mi perfil)
+-   Añadir funcionalidad al botón Borrar Cuenta
+-   Añadir Burbuja con Avatar a la derecha de UserName y Email
+
+Rooms
+-----------------
+-   Editar Sala (Puedes poner mas de 6 huecos, esto dependera de cada juego)
+Debo implementar en cada sala una llamada al Atributo Game.maxCapacity y en
+Room refactorizar el codigo capacity para que en funcion de la capacidad elejida
+se coloquen los huecos en verde
+(Game.maxCapacity - Room.capacity(Esta capacidad cambiara cuando alguien haga join o disconnect))
+
+-   Refactorizar la columna Room.Contraseña para usarla como codigo para dar al unirse a la sala,
+es decir, será el código que darás a los participantes de la sala (Debe ser obligatorio)
+
+-   El filtro de Capacidad y el de sala Publica/Privada, no funciona.
+
+-   Las Room solo se deben mostrar si la Room pertenece al juego Seleccionado en el Select del Navbar
+
+AdminPanel
+--------------
+-   Restringir Acceso a "SOLO ADMINS" (Quizas sea mejor Unificar y dividir segun ctx)
+-   Mover Botones al AdminNavbar
+
+GameManager
+--------------
+-   Restringir Acceso a "SOLO ADMINS"
+
+UserManager
+--------------
+-   Restringir Acceso a "SOLO ADMINS"
+
+RoomManager
+--------------
+-   Restringir Acceso a "SOLO ADMINS"
+
+Proyecto Terminado
+--------------------
+-   Verificar Concordancia de Estilos
+-   Verificar Concordancia de Rutas
+-   Tests de pagina
