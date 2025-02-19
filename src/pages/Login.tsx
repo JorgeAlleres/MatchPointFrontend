@@ -19,7 +19,7 @@ function Login() {
     // mensaje por post al api del backend
     try {
       await AuthService.loginUser(form.email, form.password)
-      toast('Login Successful')
+      toast('✅ Login Successful')
       navigate('/')
       {/*TODO Detectar si el usuario es admin y enviarlo al home para admins*/}
     } catch (error) {
