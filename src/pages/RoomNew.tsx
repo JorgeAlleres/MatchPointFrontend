@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { RoomService } from '../../services/room.service';
+import { RoomService } from '../services/room.service';
 import { useNavigate } from 'react-router-dom';
 
 function RoomNew() {
@@ -32,7 +32,7 @@ function RoomNew() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white pt-20">
       <div className="flex flex-col items-center">
         {/* Contenedor principal */}
         <div className="p-8 rounded shadow-md w-96">

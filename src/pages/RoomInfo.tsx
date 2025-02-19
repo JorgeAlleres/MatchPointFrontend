@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { RoomService } from "../../services/room.service";
+import { RoomService } from '../services/room.service';
 import { useParams } from "react-router-dom";
-import Room from "../../models/Room";
+import Room from "../models/Room";
 
 function RoomInfo() {
   const [room, setRoom] = useState<Room>()

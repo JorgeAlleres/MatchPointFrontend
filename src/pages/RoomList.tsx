@@ -1,8 +1,8 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { RoomService } from "../../services/room.service";
+import { RoomService } from '../services/room.service';
 import toast from "react-hot-toast";
-import Room from "../../models/Room";
+import Room from "../models/Room";
 
 function RoomList() {
     const [rooms, setRooms] = useState<Room[]>();
@@ -50,7 +50,7 @@ function RoomList() {
         try {
             await RoomService.delete(id);
             setRooms((prevRooms) => prevRooms?.filter((room) => room.id !== id));
-            toast.success("Room succesfully deleted");
+            toast.success("✅ Room succesfully deleted");
         } catch (error) {
             setError(error instanceof Error ? error.message : "Unknown error");
         }
@@ -58,7 +58,7 @@ function RoomList() {
 
     return (
         //TODO El filtrado de capacidad y de sala privada/publica funciona mal
-        <div className="flex flex-wrap p-4 text-white gap-4">
+        <div className="flex flex-wrap p-4 text-white gap-4 pt-20">
             <div className="flex justify-between items-center w-full">
                 <h1 className="text-2xl font-bold mb-4">Listado de rooms</h1>
 

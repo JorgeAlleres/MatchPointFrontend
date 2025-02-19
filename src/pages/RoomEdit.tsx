@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { RoomService } from '../../services/room.service';
+import { RoomService } from '../services/room.service';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function RoomEdit() {
@@ -52,7 +52,7 @@ function RoomEdit() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+        <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white pt-20">
             <div className="flex flex-col items-center">
                 <div className="p-8 rounded shadow-md w-96">
                     <h2 className="text-2xl font-semibold mb-4 text-center">Editar Sala</h2>
