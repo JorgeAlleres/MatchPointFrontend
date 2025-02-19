@@ -3,7 +3,7 @@ import { FetchAPI } from "../utils/FetchAPI"
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 export class UserService {
-    static async getUsers() {
+    static async getAll() {
         try {
             return await FetchAPI(API_BASE_URL + '/user/', {
                 method: 'GET',
@@ -29,8 +29,8 @@ export class UserService {
         )
     }
 
-    static async updateUser(userId: number, userData: Partial<User>): Promise<User> {
-        const response = await FetchAPI(API_BASE_URL + `/user/${userId}`, {
+    static async update(userId: number, userData: Partial<User>): Promise<User> {
+        return await FetchAPI(API_BASE_URL + `/user/${userId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -38,26 +38,14 @@ export class UserService {
             credentials: 'include',
             body: JSON.stringify(userData),
         });
-
-        if (!response.ok) {
-            throw new Error('Error al actualizar el usuario');
-        }
-
-        return response.json();
     }
-    static async deleteUser(userId: number) {
-        const response = await fetch(`${API_BASE_URL}/user/${userId}`, {
+    static async delete(userId: number) {
+        return await fetch(`${API_BASE_URL}/user/${userId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
             },
             credentials: 'include',
         });
-
-        if (!response.ok) {
-            throw new Error('Error al eliminar el usuario');
-        }
-
-        return response.json();
     }
 }
