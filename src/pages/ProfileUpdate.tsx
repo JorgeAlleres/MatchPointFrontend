@@ -56,7 +56,7 @@ function ProfileUpdate() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white pt-20">
       <div className="flex flex-col items-center">
 
         {/* Contenedor principal */}
