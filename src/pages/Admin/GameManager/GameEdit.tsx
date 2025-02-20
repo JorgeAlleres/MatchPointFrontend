@@ -39,7 +39,7 @@ function GameEdit() {
 
         try {
             await GameService.update(Number(id), gameData);
-            navigate(`/games`);
+            navigate(`/gameAdmin`);
         } catch (error) {
             console.log(error);
         }
