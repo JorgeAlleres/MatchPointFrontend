@@ -10,15 +10,13 @@ Login
 
 Navbar
 --------------------
--   Añadir un Link en el Centro a la Página Home/AdminPanel
--   Si es Admin -> AdminNavbar (CREAR)  // Si es User -> Navbar
--   Cambiar el Botón de Profile por el nombre de Usuario y una burbuja con el avatar(*Primero en Profile*)
+-   Gestionar variable isAdmin/isAuthenticate
+-   Cambiar el Botón de Profile por el nombre de Usuario y una burbuja con el avatar
 
 Profile
 ----------------
 -   Redireccion al pulsar el Navbar (Deberia redirigir a mi perfil)
 -   Añadir funcionalidad al botón Borrar Cuenta
--   Añadir Burbuja con Avatar a la derecha de UserName y Email
 
 Rooms
 -----------------
@@ -35,11 +33,6 @@ es decir, será el código que darás a los participantes de la sala (Debe ser o
 
 -   Las Room solo se deben mostrar si la Room pertenece al juego Seleccionado en el Select del Navbar
 
-AdminPanel
---------------
--   Restringir Acceso a "SOLO ADMINS" (Quizas sea mejor Unificar y dividir segun ctx)
--   Mover Botones al AdminNavbar
-
 GameManager
 --------------
 -   Restringir Acceso a "SOLO ADMINS"
@@ -51,6 +44,7 @@ UserManager
 RoomManager
 --------------
 -   Restringir Acceso a "SOLO ADMINS"
+-   Mostrar el Codigo del Juego
 
 Proyecto Terminado
 --------------------
