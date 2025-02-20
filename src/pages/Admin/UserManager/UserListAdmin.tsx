@@ -29,9 +29,12 @@ function UserList() {
     };
 
     return (
-        <div className="relative overflow-x-auto">
+        <div className="relative overflow-x-auto pt-50">
             {loading && <div className="text-black font-bold mb-4">{loading}</div>}
             {error && <div className="text-red-500 font-bold mb-4">{error}</div>}
+            <div className="flex justify-between items-center w-full text-white">
+                <h1 className="text-2xl font-bold mb-4">Listado de Users</h1>
+            </div>
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
