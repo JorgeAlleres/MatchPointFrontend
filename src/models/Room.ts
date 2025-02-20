@@ -3,7 +3,7 @@ export default interface Room {
     roomName: string
     description?: string
     capacity: number
-    password?: string
+    code: string
     private: boolean
     published: Date
     expired?: Date
