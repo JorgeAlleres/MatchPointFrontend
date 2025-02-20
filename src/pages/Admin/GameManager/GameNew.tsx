@@ -20,7 +20,7 @@ function GameNew() {
         };
         try {
             GameService.create(gameData)
-            navigate('/games')
+            navigate('/gamesAdmin')
         } catch (error) {
             console.log(error)
         }
