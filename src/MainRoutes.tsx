@@ -6,16 +6,17 @@ import Register from './pages/Register'
 import Profile from './pages/Profile'
 import ProfileUpdate from './pages/ProfileUpdate'
 import AdminPanel from './pages/Admin/AdminPanel'
-import RoomManager from './pages/Admin/RoomManager'
-import GameList from './pages/Admin/GameManager/GameList'
+import GameList from './pages/Admin/GameManager/GameListAdmin'
 import GameNew from './pages/Admin/GameManager/GameNew'
 import GameEdit from './pages/Admin/GameManager/GameEdit'
 import UserEdit from './pages/Admin/UserManager/UserEdit'
-import UserList from './pages/Admin/UserManager/UserList'
+import UserList from './pages/Admin/UserManager/UserListAdmin'
+import RoomListAdmin from './pages/Admin/RoomManager/RoomListAdmin'
 import RoomList from './pages/RoomList'
 import RoomNew from './pages/RoomNew'
 import RoomEdit from './pages/RoomEdit'
 import RoomInfo from './pages/RoomInfo'
+import RoomEditAdmin from './pages/Admin/RoomManager/RoomEditAdmin'
 
 function MainRoutes() {
   const location = useLocation()
@@ -41,12 +42,13 @@ function MainRoutes() {
           <Route path="/rooms/:id" element={<RoomInfo />} />
           {/*Rutas para Admins */}
           <Route path="/admin" element={<AdminPanel />} />
-          <Route path="/games" element={<GameList />} />
-          <Route path="/games/new" element={<GameNew />} />
-          <Route path="/games/edit/:id" element={<GameEdit />} />
-          <Route path="/users" element={<UserList />} />
-          <Route path="/users/edit/:id" element={<UserEdit />} />
-          <Route path="/roomManager" element={<RoomManager />} />
+          <Route path="/gameAdmin" element={<GameList />} />
+          <Route path="/gameAdmin/new" element={<GameNew />} />
+          <Route path="/gameAdmin/edit/:id" element={<GameEdit />} />
+          <Route path="/userAdmin" element={<UserList />} />
+          <Route path="/userAdmin/edit/:id" element={<UserEdit />} />
+          <Route path="/roomAdmin" element={<RoomListAdmin />} />
+          <Route path="/roomAdmin/edit/:id" element={<RoomEditAdmin/>} />
         </Routes>
       </div>
     </div>
