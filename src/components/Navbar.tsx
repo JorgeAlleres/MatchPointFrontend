@@ -37,20 +37,25 @@ function Navbar() {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <nav className="bg-white dark:bg-gray-900 fixed w-full z-50 top-0 left-0 start-0 border-b border-gray-200 dark:border-gray-600">
+    <nav className="bg-gray-900 text-white fixed w-full top-0 left-0 z-50 border-b border-gray-700">
       {isAuthenticate &&
-        <div className="max-w-screen-xl flex items-center justify-center mx-auto p-4">
+        <div className="max-w-screen-xl mx-auto p-4 flex items-center justify-between">
+
           {msg}
 
-          <div className="flex items-center justify-center space-x-4 w-full">
-            {/* Select dinámico para juegos */}
+          <div className="flex flex-1 justify-start space-x-4">
             {isAdmin ?
-              <Link
-                to={'/roomAdmin'}
-                className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300'
-                >
-                Room Manager
-              </Link>
+              <>
+                <Link to="/roomsAdmin" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                  Room Manager
+                </Link>
+                <Link to="/gamesAdmin" className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                  Game Manager
+                </Link>
+                <Link to="/usersAdmin" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                  User Manager
+                </Link>
+              </>
               :
               <select
                 onChange={handleGameChange}
@@ -65,37 +70,22 @@ function Navbar() {
                 ))}
               </select>
             }
+          </div>
 
-            {/* Insertar un enlace al GameManager solo para ADMIN */}
-            {isAdmin &&
-              <Link
-                to={'/gameAdmin'}
-                className='bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition duration-300'
-                >
-                Game Manager
-              </Link>
-            }
-
-            {/* Insertar un enlace al UserManager solo para ADMIN */}
-            {isAdmin &&
-              <Link
-                to={'/userAdmin'}
-                className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300'              >
-                User Manager
-              </Link>
-            }
-
-            {/* Insertar un enlace al home o al home admin */}
+          {/* Sección central */}
+          <div className="absolute left-1/2 transform -translate-x-1/2">
             <Link
               to={isAdmin ? '/admin' : '/'}
-              className='py-2 px-4 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors'
+              className="py-2 px-4 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
             >
               {isAdmin ? 'HOME ADMIN' : 'HOME'}
             </Link>
+          </div>
 
-            {/* Link del perfil */}
+          {/* Sección derecha */}
+          <div className="flex-1 flex justify-end">
             <Link
-              to="/profile" //TODO No se como abrir el id de mi usuario
+              to="/profile"
               className="py-2 px-4 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
             >
               Profile
