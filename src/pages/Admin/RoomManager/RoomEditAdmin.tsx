@@ -72,7 +72,7 @@ function RoomEditAdmin() {
 
                     <div className="mb-4">
                         <label htmlFor="description" className="block text-sm font-bold mb-2">
-                            Descripció
+                            Descripción
                         </label>
                         <input
                             type="text"
