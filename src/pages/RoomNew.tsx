@@ -6,13 +6,13 @@ function RoomNew() {
   const [roomName, setRoomName] = useState('');
   const [description, setDescription] = useState('');
   const [capacity, setCapacity] = useState('');
-  const [password, setPassword] = useState('');
+  const [code, setCode] = useState('');
   const [privateCheck, setPrivateCheck] = useState(false);
   const navigate = useNavigate()
 
   const handleSubmit = () => {
     //TODO Enviar datos al backend para crear la nueva sala
-    if (!roomName || !capacity) {
+    if (!roomName || !capacity || !code) {
       alert("Por favor, complete todos los campos obligatorios.");
       return;
     }
@@ -20,12 +20,12 @@ function RoomNew() {
       roomName: roomName,
       description,
       capacity: Number(capacity),
-      password,
+      code,
       private: privateCheck
     };
     try {
       RoomService.create(roomData)
-      navigate('/games/1/room')
+      navigate('/rooms')
     } catch (error) {
       console.log(error)
     }
@@ -77,15 +77,15 @@ function RoomNew() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-bold mb-2">
-              Contraseña
+            <label htmlFor="code" className="block text-sm font-bold mb-2">
+              Código <span className="text-red-500">*</span>
             </label>
             <input
-              type="password"
-              id="password"
+              type="text"
+              id="code"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
             />
           </div>
 

@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { RoomService } from '../services/room.service';
 import toast from "react-hot-toast";
 import Room from "../models/Room";
@@ -8,41 +8,34 @@ function RoomList() {
     const [rooms, setRooms] = useState<Room[]>();
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
-
+    const [searchParams] = useSearchParams();
+    const idRoomGame = searchParams.get('idRoomGame');
     const [queryParams, setQueryParams] = useSearchParams();
     const roomNameQuery = queryParams.get("roomName") || "";
-    const capacityFilter = Number(queryParams.get("capacity")) || 0;
-    const privacyFilter = Boolean(queryParams.get("private")) || false;
-
-    const { gameId } = useParams<{ gameId: string }>();
-    {/*TODO Ver como listar las salas solo del juego seleccionado */}
+    const capacityFilter = queryParams.get("capacity") || "";
+    const privacyFilter = queryParams.get("private") === "true";  // Convertir "true" o "false"
 
     useEffect(() => {
-        /*if (!gameId) {
-            setError("Game ID is missing");
-            setLoading(false);
-            return;
-        }*/
         setLoading(true);
-        RoomService.search(Number(gameId), roomNameQuery, capacityFilter, privacyFilter)
+        RoomService.search(Number(idRoomGame), roomNameQuery, Number(capacityFilter), privacyFilter)
             .then(setRooms)
             .catch((error) => setError(error.message))
             .finally(() => setLoading(false));
-    }, [gameId, roomNameQuery, capacityFilter, privacyFilter]);
+    }, [idRoomGame, roomNameQuery, capacityFilter, privacyFilter]);
 
     const handleSearchChangeName = (e: ChangeEvent<HTMLInputElement>) => {
         const newRoomName = e.target.value;
-        setQueryParams(newRoomName ? { roomName: newRoomName } : {});
+        setQueryParams(prevParams => newRoomName ? { ...prevParams, roomName: newRoomName } : {});
     };
 
-    const handleSearchChangeCapcity = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+    const handleSearchChangeCapacity = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const capacityFilter = e.target.value;
-        setQueryParams(capacityFilter ? { capacity: capacityFilter } : {});
+        setQueryParams(prevParams => capacityFilter ? { ...prevParams, capacity: capacityFilter } : {});
     };
 
     const handleSearchChangePrivacy = (e: ChangeEvent<HTMLInputElement>) => {
-        const privacyFilter = e.target.value;
-        setQueryParams(privacyFilter ? { private: privacyFilter } : {});
+        const privacyFilter = e.target.checked ? "true" : "false";  // Convertir a "true" o "false"
+        setQueryParams(prevParams => ({ ...prevParams, private: privacyFilter }));
     };
 
     const handleDelete = async (id: number) => {
@@ -50,14 +43,13 @@ function RoomList() {
         try {
             await RoomService.delete(id);
             setRooms((prevRooms) => prevRooms?.filter((room) => room.id !== id));
-            toast.success("✅ Room succesfully deleted");
+            toast.success("✅ Room successfully deleted");
         } catch (error) {
             setError(error instanceof Error ? error.message : "Unknown error");
         }
     };
 
     return (
-        //TODO El filtrado de capacidad y de sala privada/publica funciona mal
         <div className="flex flex-wrap p-4 text-white gap-4 pt-20">
             <div className="flex justify-between items-center w-full">
                 <h1 className="text-2xl font-bold mb-4">Listado de rooms</h1>
@@ -69,16 +61,17 @@ function RoomList() {
                     Añadir nueva room
                 </Link>
             </div>
+
             <div className="w-full flex flex-wrap gap-4">
                 <input
                     value={roomNameQuery}
                     onChange={handleSearchChangeName}
                     placeholder="Buscar por nombre"
                     className="shadow appearance-none border rounded py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline flex-grow"
-                    />
+                />
                 <select
                     value={capacityFilter}
-                    onChange={handleSearchChangeCapcity}
+                    onChange={handleSearchChangeCapacity}
                     className="shadow border rounded py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                 >
                     <option value="">Todas las capacidades</option>
@@ -124,8 +117,7 @@ function RoomList() {
                                     <div
                                         key={index}
                                         className={`w-4 h-4 rounded-full mr-1 ${index >= 5 - room.capacity ? 'bg-green-500' : 'bg-red-500'
-                                            }`}
-                                    ></div>
+                                            }`}></div>
                                 ))}
                             </div>
                         ) : (
@@ -133,9 +125,11 @@ function RoomList() {
                         )}
                     </span>
 
-                    {!room.private ? 
-                        <span>Sala Pública</span> :
-                        <span>Sala Privada</span>}
+                    {!room.private ? (
+                        <span>Sala Pública</span>
+                    ) : (
+                        <span>Sala Privada</span>
+                    )}
 
                     <div>
                         <Link

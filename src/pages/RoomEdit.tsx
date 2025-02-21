@@ -7,7 +7,7 @@ function RoomEdit() {
     const [roomName, setRoomName] = useState('');
     const [description, setDescription] = useState('');
     const [capacity, setCapacity] = useState('');
-    const [password, setPassword] = useState('');
+    const [code, setCode] = useState('');
     const [privateCheck, setPrivateCheck] = useState(false);
     const navigate = useNavigate();
 
@@ -19,7 +19,7 @@ function RoomEdit() {
                 setRoomName(room.roomName);
                 setDescription(room.description);
                 setCapacity(room.capacity);
-                setPassword(room.password || '');
+                setCode(room.code);
                 setPrivateCheck(room.private);
             } catch (error) {
                 console.error('Error al cargar los datos de la sala', error);
@@ -30,7 +30,7 @@ function RoomEdit() {
     }, [id]);
 
     const handleSubmit = async () => {
-        if (!roomName || !capacity) {
+        if (!roomName || !capacity || !code) {
             alert("Por favor, complete todos los campos obligatorios.");
             return;
         }
@@ -39,13 +39,13 @@ function RoomEdit() {
             roomName,
             description,
             capacity: Number(capacity),
-            password,
+            code,
             private: privateCheck,
         };
 
         try {
             await RoomService.update(Number(id), roomData);
-            navigate(`/games/1/room/`);
+            navigate(`/rooms`);
         } catch (error) {
             console.log(error);
         }
@@ -97,15 +97,15 @@ function RoomEdit() {
                     </div>
 
                     <div className="mb-4">
-                        <label htmlFor="password" className="block text-sm font-bold mb-2">
-                            Contraseña
+                        <label htmlFor="code" className="block text-sm font-bold mb-2">
+                            Código <span className="text-red-500">*</span>
                         </label>
                         <input
-                            type="password"
-                            id="password"
+                            type="text"
+                            id="code"
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            value={code}
+                            onChange={(e) => setCode(e.target.value)}
                         />
                     </div>
 
