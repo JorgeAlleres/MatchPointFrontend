@@ -22,15 +22,16 @@ export class RoomService {
             throw new Error(msg)
         }
     }
-    static async search(gameId?: number, roomName?: string, capacity?: number, privateQuery?: boolean) {
+    static async search(idRoomGame: number, roomName?: string, capacity?: number, privateQuery?: boolean) {
         let url = API_BASE_URL + '/room?'
-        if (gameId) url += 'gameId=' + gameId + '&'
+        if (idRoomGame) url += 'idRoomGame=' + idRoomGame + '&'
         if (roomName) url += 'roomName=' + roomName + '&'
         if (capacity) url += 'capacity=' + capacity + '&'
         if (privateQuery) url += 'private=' + privateQuery + '&'
 
         // Eliminar el último "&" si se añadió algún parámetro
         url = url.endsWith('&') ? url.slice(0, -1) : url;
+        console.log(url)
         return await FetchAPI(url,
             {
                 method: 'GET',
