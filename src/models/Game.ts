@@ -3,4 +3,5 @@ export default interface Game {
     gameName: string
     genre: string
     platform: string
+    maxCapacity: number
 }
