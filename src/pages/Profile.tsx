@@ -20,23 +20,28 @@ function Profile() {
 
   const { id } = useParams();
 
-  const getData = async () => {
-    try {
-      const data = await UserService.getById(Number(id));
-      setUserName(data.userName);
-      setEmail(data.email);
-      setAvatar(avatarPorDefecto)
-    } catch (error) {
-      const msg = error instanceof Error ? error.message : 'Error desconocido'
-      setMessage(msg)
-    } finally {
-      setLoading(false)
-    }
-  };
-
   useEffect(() => {
-    getData()
-  }, [id])
+    const getData = async () => {
+      try {
+        if (!id) {
+          setMessage('ID de usuario no encontrado.');
+          setLoading(false);
+          return;
+        }
+        const data = await UserService.getById(Number(id));
+        setUserName(data.userName);
+        setEmail(data.email);
+        setAvatar(data.avatar || avatarPorDefecto);
+      } catch (error) {
+        const msg = error instanceof Error ? error.message : 'Error desconocido';
+        setMessage(msg);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getData();
+  }, [id]);
 
   if (loading) return <div className="text-white">Loading...</div>
 
