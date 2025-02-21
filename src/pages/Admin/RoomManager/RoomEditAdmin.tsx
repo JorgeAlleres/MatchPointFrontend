@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RoomService } from '../../../services/room.service';
+import { GameService } from '../../../services/game.service';
+import Game from '../../../models/Game';
 
 function RoomEditAdmin() {
     const { id } = useParams(); // Para obtener el ID de la sala desde la URL
@@ -9,6 +11,8 @@ function RoomEditAdmin() {
     const [capacity, setCapacity] = useState(0);
     const [code, setCode] = useState('');
     const [privateRoom, setPrivateRoom] = useState(false);
+    const [games, setGames] = useState<Game[]>([]);
+    const [selectedGameId, setSelectedGameId] = useState<number | null>(null);
     const navigate = useNavigate();
 
     // Cargar los datos de la sala al montar el componente
@@ -21,16 +25,27 @@ function RoomEditAdmin() {
                 setCapacity(room.capacity);
                 setCode(room.code)
                 setPrivateRoom(room.private);
+                setSelectedGameId(room.idRoomGame);
             } catch (error) {
                 console.error('Error al cargar los datos de la room', error);
             }
         }
 
+        async function getGames() {
+            try {
+                const gameList = await GameService.getAll();
+                setGames(gameList);
+            } catch (error) {
+                console.error("Error al cargar los juegos", error);
+            }
+        }
+
         call();
+        getGames()
     }, [id]);
 
     const handleSubmit = async () => {
-        if (!roomName || !capacity || !code) {
+        if (!roomName || !capacity || !code || !selectedGameId) {
             alert("Por favor, complete todos los campos obligatorios.");
             return;
         }
@@ -40,12 +55,13 @@ function RoomEditAdmin() {
             description,
             capacity,
             code,
-            private: privateRoom
+            private: privateRoom,
+            idRoomGame: selectedGameId
         };
 
         try {
             await RoomService.update(Number(id), roomData);
-            navigate(`/roomAdmin`);
+            navigate(`/roomsAdmin`);
         } catch (error) {
             console.log(error);
         }
@@ -84,7 +100,7 @@ function RoomEditAdmin() {
                     </div>
 
                     <div className="mb-4">
-                        <label htmlFor="capcaity" className="block text-sm font-bold mb-2">
+                        <label htmlFor="capacity" className="block text-sm font-bold mb-2">
                             Capacidad <span className="text-red-500">*</span>
                         </label>
                         <input
@@ -107,6 +123,25 @@ function RoomEditAdmin() {
                             value={code}
                             onChange={(e) => setCode(e.target.value)}
                         />
+                    </div>
+
+                    <div className="mb-4">
+                        <label htmlFor="gameSelect" className="block text-sm font-bold mb-2">
+                            Juego <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                            id="gameSelect"
+                            className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            value={selectedGameId ?? ""}
+                            onChange={(e) => setSelectedGameId(Number(e.target.value))}
+                        >
+                            <option value="" disabled>Selecciona un juego</option>
+                            {games.map((game) => (
+                                <option key={game.id} value={game.id}>
+                                    {game.gameName}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="mb-4 flex items-center gap-2">
