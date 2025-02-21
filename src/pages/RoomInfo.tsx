@@ -4,25 +4,26 @@ import { useParams } from "react-router-dom";
 import Room from "../models/Room";
 
 function RoomInfo() {
-  const [room, setRoom] = useState<Room>()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [room, setRoom] = useState<Room>();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const { id } = useParams()
+  const { id } = useParams();
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     RoomService.getById(Number(id))
       .then(setRoom)
-      .catch(error => setError(error.message))
-      .finally(() => setLoading(false))
-  }, [id])
+      .catch((error) => setError(error.message))
+      .finally(() => setLoading(false));
+  }, [id]);
 
-  if (loading) return <div>Loading...</div>
-  if (error) return <div>Error: {error}</div>
-  if (!room) return <div>Sala no encontrada</div>
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!room) return <div>Sala no encontrada</div>;
 
   return (
+    // Este div asegura que el contenido esté centrado en la pantalla tanto vertical como horizontalmente
     <div className="text-white flex flex-col items-center justify-center h-screen font-sans">
       <h1 className="text-2xl font-bold mb-8">{room.roomName}</h1>
       <p>{room.description}</p>
@@ -46,13 +47,12 @@ function RoomInfo() {
           />
         ))}
       </div>
-      <div className="text-lg">
-        <p>Código para unirse:</p>{/*TODO Implementar pasar el codigo todavia no existe en la BBDD (Refactorizar la contraseña para que sea el code*/}
-        <p className="font-mono text-xl">[IMPLEMENTAR]</p>
+      <div className="text-lg text-center">
+        <p>Código para unirse:</p>
+        <p className="font-mono text-xl">{room.code}</p>
       </div>
     </div>
   );
 }
 
 export default RoomInfo;
-
