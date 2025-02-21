@@ -1,21 +1,39 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { FetchAPI } from '../utils/FetchAPI';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { UserService } from '../services/user.service';
 
 function ProfileUpdate() {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
+  const [avatar, setAvatar] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [repeatNewPassword, setRepeatNewPassword] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const {id} = useParams()
 
+  const navigate = useNavigate()
+
   {/*TODO Como Cojo el id de mi usuario? */}
+
+  useEffect(() => {
+          async function call() {
+              try {
+                  const user = await UserService.getById(Number(id));
+                  setUserName(user.userName ?? '');
+                  setEmail(user.email ?? '');
+                  setAvatar(user.avatar)
+              } catch (error) {
+                  console.error('Error al cargar los datos del user', error);
+              }
+          }
+  
+          call();
+      }, [id]);
 
   const handleSubmit = async () => {
     // Validaciones básicas
-    if (!userName || !email || !oldPassword) {
+    if (!userName || !email || !oldPassword || !avatar) {
       toast.error('Por favor, completa todos los campos obligatorios.');
       return;
     }
@@ -29,29 +47,16 @@ function ProfileUpdate() {
     const newDataProfile = {
       userName,
       email,
+      avatar,
       oldPassword,
       newPassword: newPassword || null,
     };
 
     try {
-      const response = await FetchAPI(`/api/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include', // Para enviar cookies si se usan
-        body: JSON.stringify(newDataProfile),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        toast.success(result.message || 'Perfil actualizado correctamente.');
-      } else {
-        toast.error(result.error || 'Error al actualizar el perfil.');
-      }
-    } catch (error) {
-      toast.error('Hubo un error en la conexión.');
+      await UserService.update(Number(id), newDataProfile)
+      navigate(`/profile/${id}`);
+    } catch(error) {
+      console.log(error);
     }
   };
 
