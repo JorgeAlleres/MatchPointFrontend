@@ -2,8 +2,6 @@ Register
 -----------------
 -   Implementar funcionalidad al botón recuérdame
 
--   Añadir Checkbox para Aceptar/Rechazar notificaciones
-
 Login
 -------------------
 -   Implementar Burbujas de Inicio de sesión con Google y Github
@@ -26,10 +24,7 @@ Room refactorizar el codigo capacity para que en funcion de la capacidad elejida
 se coloquen los huecos en verde
 (Game.maxCapacity - Room.capacity(Esta capacidad cambiara cuando alguien haga join o disconnect))
 
--   Refactorizar la columna Room.Contraseña para usarla como codigo para dar al unirse a la sala,
-es decir, será el código que darás a los participantes de la sala (Debe ser obligatorio)
-
--   El filtro de Capacidad y el de sala Publica/Privada, no funciona.
+-   Los filtros no funcionan, se sobreescriben.
 
 -   Las Room solo se deben mostrar si la Room pertenece al juego Seleccionado en el Select del Navbar
 
