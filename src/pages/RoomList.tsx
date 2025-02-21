@@ -43,7 +43,7 @@ function RoomList() {
         try {
             await RoomService.delete(id);
             setRooms((prevRooms) => prevRooms?.filter((room) => room.id !== id));
-            toast.success("✅ Room successfully deleted");
+            toast.success("Room successfully deleted");
         } catch (error) {
             setError(error instanceof Error ? error.message : "Unknown error");
         }
