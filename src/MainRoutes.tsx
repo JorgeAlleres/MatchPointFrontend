@@ -36,7 +36,7 @@ function MainRoutes() {
           <Route path="/profile/update/:id" element={<ProfileUpdate />} />
           {/*Rutas para User */}
           <Route path="/" element={<Home />} />
-          <Route path="/games/:gameId/room" element={<RoomList />} />
+          <Route path="/rooms" element={<RoomList />} />
           <Route path="/rooms/new" element={<RoomNew />} />
           <Route path="/rooms/edit/:id" element={<RoomEdit />} />
           <Route path="/rooms/:id" element={<RoomInfo />} />
