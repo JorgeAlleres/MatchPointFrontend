@@ -4,35 +4,23 @@ import { FetchAPI } from "../utils/FetchAPI"
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 export class RoomService {
     static async getAll() {
-        try {
-            const response = await fetch(API_BASE_URL + '/room',
-                {
-                    method: 'GET',
-                    credentials: 'include'
-                }
-            )
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => null)
-                throw new Error(errorData?.message || 'Unknown Error')
+        return await FetchAPI(`${API_BASE_URL}/room`,
+            {
+                method: 'GET',
+                credentials: 'include'
             }
-            const data = await response.json()
-            return data
-        } catch (error) {
-            const msg = error instanceof Error ? error.message : 'Error desconocido'
-            throw new Error(msg)
-        }
+        )
+
     }
     static async search(newParams: URLSearchParams) {
         const url = `${API_BASE_URL}/room?${newParams.toString()}`;
-    
-        console.log(url);
-    
+
         return await FetchAPI(url, {
             method: 'GET',
             credentials: 'include'
         });
     }
-    
+
 
     static async getById(id: number) {
         return await FetchAPI(API_BASE_URL + '/room/' + id,
