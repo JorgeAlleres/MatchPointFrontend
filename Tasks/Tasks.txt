@@ -23,8 +23,6 @@ Room refactorizar el codigo capacity para que en funcion de la capacidad elejida
 se coloquen los huecos en verde
 (Game.maxCapacity - Room.capacity(Esta capacidad cambiara cuando alguien haga join o disconnect))
 
--   Cambiar los ID de game por el nombre del juego
-
 GameManager
 --------------
 -   Restringir Acceso a "SOLO ADMINS"
@@ -36,7 +34,6 @@ UserManager
 RoomManager
 --------------
 -   Restringir Acceso a "SOLO ADMINS"
--   Mostrar el Codigo del Juego
 
 Proyecto Terminado
 --------------------
