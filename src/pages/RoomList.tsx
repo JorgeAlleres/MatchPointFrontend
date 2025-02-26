@@ -8,35 +8,53 @@ function RoomList() {
     const [rooms, setRooms] = useState<Room[]>();
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
-    const [searchParams] = useSearchParams();
-    const idRoomGame = searchParams.get('idRoomGame');
     const [queryParams, setQueryParams] = useSearchParams();
+    const idRoomGame = queryParams.get('idRoomGame');
     const roomNameQuery = queryParams.get("roomName") || "";
     const capacityFilter = queryParams.get("capacity") || "";
-    const privacyFilter = queryParams.get("private") === "true";  // Convertir "true" o "false"
+    const privacityFilter = queryParams.get("privacity") === "false";  // Convertir "true" o "false"
 
     useEffect(() => {
         setLoading(true);
-        RoomService.search(Number(idRoomGame), roomNameQuery, Number(capacityFilter), privacyFilter)
+        RoomService.search(queryParams)
             .then(setRooms)
             .catch((error) => setError(error.message))
             .finally(() => setLoading(false));
-    }, [idRoomGame, roomNameQuery, capacityFilter, privacyFilter]);
+    }, [queryParams]);
 
     const handleSearchChangeName = (e: ChangeEvent<HTMLInputElement>) => {
         const newRoomName = e.target.value;
-        setQueryParams(prevParams => newRoomName ? { ...prevParams, roomName: newRoomName } : {});
+        const newParams = new URLSearchParams(queryParams); // Mantener los parámetros actuales
+        if (idRoomGame) newParams.set("idRoomGame", idRoomGame);
+        if (newRoomName) newParams.set("roomName", newRoomName);
+        else newParams.delete("roomName"); // Eliminar si está vacío
+
+        setQueryParams(newParams);
     };
 
     const handleSearchChangeCapacity = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const capacityFilter = e.target.value;
-        setQueryParams(prevParams => capacityFilter ? { ...prevParams, capacity: capacityFilter } : {});
+        const capacity = e.target.value;
+        const newParams = new URLSearchParams(queryParams); // Mantener los parámetros actuales
+        if (capacity) newParams.set("capacity", capacity);
+        else newParams.delete("capacity"); // Eliminar si no se selecciona
+
+        setQueryParams(newParams);
     };
 
-    const handleSearchChangePrivacy = (e: ChangeEvent<HTMLInputElement>) => {
-        const privacyFilter = e.target.checked ? "true" : "false";  // Convertir a "true" o "false"
-        setQueryParams(prevParams => ({ ...prevParams, private: privacyFilter }));
+    const handleSearchChangePrivacity = (e: ChangeEvent<HTMLInputElement>) => {
+        const privacity = e.target.checked; // Cambiado para simplemente usar el valor booleano
+        const newParams = new URLSearchParams(queryParams); // Mantener los parámetros actuales
+
+        if (privacity) {
+            newParams.set("privacity", "false"); // Establecer a "false" para solo salas públicas
+        } else {
+            newParams.delete("privacity"); // Eliminar si no se quiere filtro
+        }
+
+        setQueryParams(newParams);
     };
+
+
 
     const handleDelete = async (id: number) => {
         if (!window.confirm("¿Estás seguro que quieres borrar esta sala?")) return;
@@ -55,7 +73,7 @@ function RoomList() {
                 <h1 className="text-2xl font-bold mb-4">Listado de rooms</h1>
 
                 <Link
-                    to="/rooms/new"
+                    to={`/rooms/new?idRoomGame=${idRoomGame}`}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block"
                 >
                     Añadir nueva room
@@ -75,22 +93,22 @@ function RoomList() {
                     className="shadow border rounded py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                 >
                     <option value="">Todas las capacidades</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
+                    <option value="1">&gt; 1</option>
+                    <option value="2">&gt; 2</option>
+                    <option value="3">&gt; 3</option>
+                    <option value="4">&gt; 4</option>
+                    <option value="5">&gt; 5</option>
                 </select>
                 <div className="flex items-center">
                     <input
                         type="checkbox"
-                        id="privacyFilter"
-                        checked={privacyFilter}
-                        onChange={handleSearchChangePrivacy}
+                        id="privacityFilter"
+                        checked={privacityFilter}
+                        onChange={handleSearchChangePrivacity}
                         className="form-checkbox h-5 w-5 text-blue-600"
                     />
-                    <label htmlFor="privacyFilter" className="ml-2 text-white">
-                        Mostrar solo salas privadas
+                    <label htmlFor="privacityFilter" className="ml-2 text-white">
+                        Mostrar solo salas públicas
                     </label>
                 </div>
             </div>
@@ -110,7 +128,7 @@ function RoomList() {
 
                     {room.description && <span>Descripcion: {room.description}</span>}
 
-                    <span> Capacidad:
+                    <span>Capacidad:
                         {room.capacity >= 0 ? (
                             <div className="flex items-center">
                                 {Array.from({ length: 5 }, (_, index) => (

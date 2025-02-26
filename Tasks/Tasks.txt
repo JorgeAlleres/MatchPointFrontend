@@ -18,15 +18,13 @@ Profile
 
 Rooms
 -----------------
--   Editar Sala (Puedes poner mas de 6 huecos, esto dependera de cada juego)
+-   Editar Sala (Puedes poner mas de 5 huecos, esto dependera de cada juego)
 Debo implementar en cada sala una llamada al Atributo Game.maxCapacity y en
 Room refactorizar el codigo capacity para que en funcion de la capacidad elejida
 se coloquen los huecos en verde
 (Game.maxCapacity - Room.capacity(Esta capacidad cambiara cuando alguien haga join o disconnect))
 
--   Los filtros no funcionan, se sobreescriben.
-
--   Las Room solo se deben mostrar si la Room pertenece al juego Seleccionado en el Select del Navbar
+-   Cambiar los ID de game por el nombre del juego
 
 GameManager
 --------------

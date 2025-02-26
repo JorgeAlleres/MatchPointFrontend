@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 function RoomEdit() {
     const { id } = useParams(); // Para obtener el ID de la sala desde la URL
+    const [idRoomGame, setIdRoomGame] = useState('');
     const [roomName, setRoomName] = useState('');
     const [description, setDescription] = useState('');
     const [capacity, setCapacity] = useState('');
@@ -16,6 +17,7 @@ function RoomEdit() {
         async function call() {
             try {
                 const room = await RoomService.getById(Number(id));
+                setIdRoomGame(room.idRoomGame)
                 setRoomName(room.roomName);
                 setDescription(room.description);
                 setCapacity(room.capacity);
@@ -30,12 +32,13 @@ function RoomEdit() {
     }, [id]);
 
     const handleSubmit = async () => {
-        if (!roomName || !capacity || !code) {
+        if (!idRoomGame || !roomName || !capacity || !code) {
             alert("Por favor, complete todos los campos obligatorios.");
             return;
         }
 
         const roomData = {
+            idRoomGame: Number(idRoomGame),
             roomName,
             description,
             capacity: Number(capacity),
@@ -45,7 +48,7 @@ function RoomEdit() {
 
         try {
             await RoomService.update(Number(id), roomData);
-            navigate(`/rooms`);
+            navigate(`/rooms?idRoomGame=${idRoomGame}`);
         } catch (error) {
             console.log(error);
         }
@@ -56,7 +59,7 @@ function RoomEdit() {
             <div className="flex flex-col items-center">
                 <div className="p-8 rounded shadow-md w-96">
                     <h2 className="text-2xl font-semibold mb-4 text-center">Editar Sala</h2>
-
+                    <h2 className="text-2xl font-semibold mb-4 text-center">Juego: {idRoomGame}</h2>
                     <div className="mb-4">
                         <label htmlFor="roomName" className="block text-sm font-bold mb-2">
                             Nombre de la sala <span className="text-red-500">*</span>

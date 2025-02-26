@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { RoomService } from '../services/room.service';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 function RoomNew() {
+  const [queryParams] = useSearchParams();
+  const idRoomGame = queryParams.get('idRoomGame');
   const [roomName, setRoomName] = useState('');
   const [description, setDescription] = useState('');
   const [capacity, setCapacity] = useState('');
@@ -12,11 +14,12 @@ function RoomNew() {
 
   const handleSubmit = () => {
     //TODO Enviar datos al backend para crear la nueva sala
-    if (!roomName || !capacity || !code) {
+    if (!idRoomGame || !roomName || !capacity || !code) {
       alert("Por favor, complete todos los campos obligatorios.");
       return;
     }
     const roomData = {
+      idRoomGame: Number(idRoomGame),
       roomName: roomName,
       description,
       capacity: Number(capacity),
@@ -25,7 +28,7 @@ function RoomNew() {
     };
     try {
       RoomService.create(roomData)
-      navigate('/rooms')
+      navigate(`/rooms?idRoomGame=${idRoomGame}`)
     } catch (error) {
       console.log(error)
     }
@@ -36,7 +39,8 @@ function RoomNew() {
       <div className="flex flex-col items-center">
         {/* Contenedor principal */}
         <div className="p-8 rounded shadow-md w-96">
-          <h2 className="text-2xl font-semibold mb-4 text-center">Crear Sala</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-center">Crear Sala para</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-center">Juego: {idRoomGame}</h2>
           <div className="mb-4">
             <label htmlFor="roomName" className="block text-sm font-bold mb-2">
               Nombre de la sala <span className="text-red-500">*</span>

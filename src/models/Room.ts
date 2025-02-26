@@ -7,5 +7,5 @@ export default interface Room {
     private: boolean
     published: Date
     expired?: Date
-    idGame: number
+    idRoomGame: number
 }
