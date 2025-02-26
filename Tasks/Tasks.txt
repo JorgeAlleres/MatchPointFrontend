@@ -17,11 +17,8 @@ Profile
 
 Rooms
 -----------------
--   Editar Sala (Puedes poner mas de 5 huecos, esto dependera de cada juego)
-Debo implementar en cada sala una llamada al Atributo Game.maxCapacity y en
-Room refactorizar el codigo capacity para que en funcion de la capacidad elejida
-se coloquen los huecos en verde
-(Game.maxCapacity - Room.capacity(Esta capacidad cambiara cuando alguien haga join o disconnect))
+-   Join Room
+-   Leave Room
 
 GameManager
 --------------
