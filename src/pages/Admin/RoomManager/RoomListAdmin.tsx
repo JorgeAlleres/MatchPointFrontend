@@ -3,9 +3,12 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Room from "../../../models/Room";
 import { RoomService } from "../../../services/room.service";
+import { GameService } from "../../../services/game.service";
+import Game from "../../../models/Game";
 
 function RoomListAdmin() {
     const [rooms, setRooms] = useState<Room[]>();
+    const [games, setGames] = useState<Map<number, string>>(new Map());
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -15,6 +18,15 @@ function RoomListAdmin() {
             .then(setRooms)
             .catch((error) => setError(error.message))
             .finally(() => setLoading(false));
+
+        // Cargar juegos y mapearlos
+        GameService.getAll()
+            .then((gameList: Game[]) => {
+                const gameMap = new Map<number, string>();
+                gameList.forEach(game => gameMap.set(game.id, game.gameName)); // Mapea id -> nombre
+                setGames(gameMap);
+            })
+            .catch(error => setError(error.message));
     }, []);
 
     const handleDelete = async (id: number) => {
@@ -44,7 +56,7 @@ function RoomListAdmin() {
                         <th className="px-4 py-2">Capacidad</th>
                         <th className="px-4 py-2">Codigo</th>
                         <th className="px-4 py-2">Privada</th>
-                        <th className="px-4 py-2">ID Juego</th>
+                        <th className="px-4 py-2">Juego</th>
                         <th className="px-4 py-2">Gestionar</th>
                     </tr>
                 </thead>
@@ -53,17 +65,17 @@ function RoomListAdmin() {
                         <tr key={room.id} className="border-b">
                             <td className="px-4 py-2">{room.id}</td>
                             <td className="px-4 py-2">{room.roomName}</td>
-                            <td className="px-4 py-2">{room.description?room.description:'No tiene descripcion'}</td>
+                            <td className="px-4 py-2">{room.description ? room.description : 'No tiene descripcion'}</td>
                             <td className="px-4 py-2">{room.capacity}</td>
                             <td className="px-4 py-2">{room.code}</td>
-                            <td className="px-4 py-2">{room.private?<p>✅</p>:<p>❌</p>}</td>
-                            <td className="px-4 py-2">{room.idGame}</td>
+                            <td className="px-4 py-2">{room.private ? <p>✅</p> : <p>❌</p>}</td>
+                            <td className="px-4 py-2">{games.get(room.idRoomGame) ?? "Desconocido"}</td>
                             <td className="px-4 py-2">
                                 <div className="p-1">
                                     <Link
                                         className="text-yellow-500 font-bold m-2"
                                         to={`./edit/${room.id}`}>
-                                            Editar
+                                        Editar
                                     </Link>
                                     <button onClick={() => handleDelete(room.id)} className="text-red-500 font-bold">
                                         Borrar

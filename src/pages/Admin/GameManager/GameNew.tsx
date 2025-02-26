@@ -6,20 +6,22 @@ function GameNew() {
     const [gameName, setGameName] = useState('');
     const [genre, setGenre] = useState('');
     const [platform, setPlatform] = useState('');
+    const [maxCapacity, setMaxCapacity] = useState(0);
     const navigate = useNavigate()
 
-    const handleSubmit = () => {
-        if (!gameName || !genre || !platform) {
+    const handleSubmit = async () => {
+        if (!gameName || !genre || !platform || !maxCapacity) {
             alert("Por favor, complete todos los campos obligatorios.");
             return;
         }
         const gameData = {
             gameName,
             genre,
-            platform
+            platform,
+            maxCapacity
         };
         try {
-            GameService.create(gameData)
+            await GameService.create(gameData)
             navigate('/gamesAdmin')
         } catch (error) {
             console.log(error)
@@ -68,6 +70,19 @@ function GameNew() {
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             value={platform}
                             onChange={(e) => setPlatform(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label htmlFor="maxCapacity" className="block text-sm font-bold mb-2">
+                            Capacidad Maxima <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="number"
+                            id="maxCapacity"
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            value={maxCapacity}
+                            onChange={(e) => setMaxCapacity(Number(e.target.value))}
                         />
                     </div>
 

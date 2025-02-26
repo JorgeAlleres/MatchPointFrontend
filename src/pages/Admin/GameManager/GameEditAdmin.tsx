@@ -7,6 +7,7 @@ function GameEdit() {
     const [gameName, setGameName] = useState('');
     const [genre, setGenre] = useState('');
     const [platform, setPlatform] = useState('');
+    const [maxCapacity, setMaxCapacity] = useState(0);
     const navigate = useNavigate();
 
     // Cargar los datos de la sala al montar el componente
@@ -17,6 +18,7 @@ function GameEdit() {
                 setGameName(game.gameName);
                 setGenre(game.genre);
                 setPlatform(game.platform);
+                setMaxCapacity(game.maxCapacity)
             } catch (error) {
                 console.error('Error al cargar los datos del game', error);
             }
@@ -26,7 +28,7 @@ function GameEdit() {
     }, [id]);
 
     const handleSubmit = async () => {
-        if (!gameName || !genre || !platform) {
+        if (!gameName || !genre || !platform || !maxCapacity) {
             alert("Por favor, complete todos los campos obligatorios.");
             return;
         }
@@ -34,12 +36,13 @@ function GameEdit() {
         const gameData = {
             gameName,
             genre,
-            platform
+            platform,
+            maxCapacity
         };
 
         try {
             await GameService.update(Number(id), gameData);
-            navigate(`/gameAdmin`);
+            navigate(`/gamesAdmin`);
         } catch (error) {
             console.log(error);
         }
@@ -89,6 +92,20 @@ function GameEdit() {
                             onChange={(e) => setPlatform(e.target.value)}
                         />
                     </div>
+
+                    <div className="mb-4">
+                        <label htmlFor="maxCapacity" className="block text-sm font-bold mb-2">
+                            Capacidad Maxima <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="number"
+                            id="maxCapacity"
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            value={maxCapacity}
+                            onChange={(e) => setMaxCapacity(Number(e.target.value))}
+                        />
+                    </div>
+
                     <p className="text-sm italic text-gray-400 mb-4">* Son campos obligatorios</p>
 
                     <div className="flex items-center justify-center">

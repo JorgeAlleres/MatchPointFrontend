@@ -36,7 +36,7 @@ function Login() {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <form className="p-6 rounded-lg shadow-md w-80 text-white" onSubmit={handleSubmit}>
+      <form className="p-6 rounded-lg shadow-md w-80 text-white bg-gray-800" onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold mb-4 text-center">Iniciar Sesión</h2>
         <div className="mb-4">
           <label htmlFor="email" className="block text-sm font-medium">Correo electrónico</label>
@@ -70,7 +70,7 @@ function Login() {
           />
           <label htmlFor="remember" className="ml-2 text-sm text-gray-600">Recuérdame</label>
         </div>
-        {/*TODO Implementar las burbujas para cceder con google, github, ...*/}
+        {/*TODO Implementar las burbujas para acceder con google, github, ...*/}
         <button
           type="submit"
           className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"

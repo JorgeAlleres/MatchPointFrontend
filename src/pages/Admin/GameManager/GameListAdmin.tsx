@@ -49,6 +49,7 @@ function GameList() {
                         <th className="px-4 py-2">Nombre</th>
                         <th className="px-4 py-2">Género</th>
                         <th className="px-4 py-2">Plataforma</th>
+                        <th className="px-4 py-2">Capacidad Máxima</th>
                         <th className="px-4 py-2">Gestionar</th>
                     </tr>
                 </thead>
@@ -59,6 +60,7 @@ function GameList() {
                             <td className="px-4 py-2">{game.gameName}</td>
                             <td className="px-4 py-2">{game.genre}</td>
                             <td className="px-4 py-2">{game.platform}</td>
+                            <td className="px-4 py-2">{game.maxCapacity}</td>
                             <td className="px-4 py-2">
                                 <div className="p-1">
                                     <Link

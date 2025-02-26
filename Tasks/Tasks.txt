@@ -13,7 +13,6 @@ Navbar
 
 Profile
 ----------------
--   Redireccion al pulsar el Navbar (Deberia redirigir a mi perfil)
 -   Añadir funcionalidad al botón Borrar Cuenta
 
 Rooms
