@@ -1,15 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RoomService } from '../services/room.service';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { GameService } from '../services/game.service';
 
 function RoomNew() {
   const [queryParams] = useSearchParams();
   const idRoomGame = queryParams.get('idRoomGame');
+  const [gameName, setGameName] = useState('');
   const [roomName, setRoomName] = useState('');
   const [description, setDescription] = useState('');
   const [capacity, setCapacity] = useState('');
   const [code, setCode] = useState('');
   const [privateCheck, setPrivateCheck] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate()
 
   const handleSubmit = () => {
@@ -34,13 +38,23 @@ function RoomNew() {
     }
   };
 
+  useEffect(() => {
+    // Cargar juegos y mapearlos
+    GameService.getById(Number(idRoomGame))
+      .then(data => setGameName(data.gameName))
+      .catch((error) => setError(error.message))
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white pt-20">
       <div className="flex flex-col items-center">
         {/* Contenedor principal */}
         <div className="p-8 rounded shadow-md w-96">
           <h2 className="text-2xl font-semibold mb-4 text-center">Crear Sala para</h2>
-          <h2 className="text-2xl font-semibold mb-4 text-center">Juego: {idRoomGame}</h2>
+          {loading && <p>Loading ...</p>}
+          {error && <p className="text-red-500">Error: {error}</p>}
+          <h2 className="text-2xl font-semibold mb-4 text-center">Juego: {gameName}</h2>
           <div className="mb-4">
             <label htmlFor="roomName" className="block text-sm font-bold mb-2">
               Nombre de la sala <span className="text-red-500">*</span>
