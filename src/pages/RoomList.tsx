@@ -3,9 +3,10 @@ import { Link, useSearchParams } from "react-router-dom";
 import { RoomService } from '../services/room.service';
 import toast from "react-hot-toast";
 import Room from "../models/Room";
+import { GameService } from "../services/game.service";
 
 function RoomList() {
-    const [rooms, setRooms] = useState<Room[]>();
+    const [rooms, setRooms] = useState<(Room & { gameMaxCapacity?: number })[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [queryParams, setQueryParams] = useSearchParams();
@@ -17,10 +18,17 @@ function RoomList() {
     useEffect(() => {
         setLoading(true);
         RoomService.search(queryParams)
-            .then(setRooms)
+            .then(async (fetchedRooms) => {
+                const roomsWithGameInfo = await Promise.all(fetchedRooms.map(async (room: Room) => {
+                    const gameInfo = await GameService.getById(room.idRoomGame);
+                    return { ...room, gameMaxCapacity: gameInfo.maxCapacity };
+                }));
+                setRooms(roomsWithGameInfo);
+            })
             .catch((error) => setError(error.message))
             .finally(() => setLoading(false));
     }, [queryParams]);
+
 
     const handleSearchChangeName = (e: ChangeEvent<HTMLInputElement>) => {
         const newRoomName = e.target.value;
@@ -129,19 +137,26 @@ function RoomList() {
                     {room.description && <span>Descripcion: {room.description}</span>}
 
                     <span>Capacidad:
-                        {room.capacity >= 0 ? (
-                            <div className="flex items-center">
-                                {Array.from({ length: 5 }, (_, index) => (
-                                    <div
-                                        key={index}
-                                        className={`w-4 h-4 rounded-full mr-1 ${index >= 5 - room.capacity ? 'bg-green-500' : 'bg-red-500'
-                                            }`}></div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div>Capacidad no disponible</div>
-                        )}
+                        {
+                            room.capacity >= 0 && room.gameMaxCapacity && room.gameMaxCapacity > 0 ? (
+                                <div className="flex items-center">
+                                    {Array.from({ length: room.gameMaxCapacity ?? 0}, (_, index) => (
+                                        <div
+                                            key={index}
+                                            className={`w-4 h-4 rounded-full mr-1 ${index < room.capacity ? 'bg-green-500' : 'bg-red-500'
+                                                }`}
+                                        ></div>
+                                    ))}
+                                    <span className="ml-2">
+                                        ({room.capacity}/{room.gameMaxCapacity})
+                                    </span>
+                                </div>
+                            ) : (
+                                <div>Capacidad no disponible</div>
+                            )
+                        }
                     </span>
+
 
                     {!room.private ? (
                         <span>Sala Pública</span>
