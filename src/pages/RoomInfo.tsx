@@ -25,7 +25,6 @@ function RoomInfo() {
   return (
     // Este div asegura que el contenido esté centrado en la pantalla tanto vertical como horizontalmente
     <div className="text-white flex flex-col items-center justify-center h-screen font-sans">
-      <h1 className="text-2xl font-bold mb-8">{room.idRoomGame}</h1>
       <h1 className="text-2xl font-bold mb-8">{room.roomName}</h1>
       <p>{room.description}</p>
       <div className="mb-4">
