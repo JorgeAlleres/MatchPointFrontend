@@ -166,7 +166,7 @@ function RoomList() {
 
                     <div>
                         <Link
-                            to={`/rooms/${room.id}`}
+                            to={`/rooms/${room.id}?idRoomGame=${idRoomGame}`}
                             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2 inline-block"
                         >
                             Ver
