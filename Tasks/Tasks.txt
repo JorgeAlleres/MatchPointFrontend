@@ -15,11 +15,6 @@ Profile
 ----------------
 -   Añadir funcionalidad al botón Borrar Cuenta
 
-Rooms
------------------
--   Join Room
--   Leave Room
-
 GameManager
 --------------
 -   Restringir Acceso a "SOLO ADMINS"
