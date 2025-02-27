@@ -29,7 +29,7 @@ function UserList() {
     };
 
     return (
-        <div className="relative overflow-x-auto pt-50">
+        <div className="relative overflow-x-auto gap-4 pt-20">
             {loading && <div className="text-black font-bold mb-4">{loading}</div>}
             {error && <div className="text-red-500 font-bold mb-4">{error}</div>}
             <div className="flex justify-between items-center w-full text-white">
