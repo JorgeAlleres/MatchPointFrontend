@@ -9,7 +9,7 @@ function Navbar() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const isAdmin = false;
+  const isAdmin = true;
   {/* TODO: Implementar si el usuario es Admin o no */ }
   const isAuthenticate = true
   {/* TODO: Implementar si el usuario esta Autenticado o no */ }
