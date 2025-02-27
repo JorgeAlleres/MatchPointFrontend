@@ -44,7 +44,7 @@ function RoomNew() {
       .then(data => setGameName(data.gameName))
       .catch((error) => setError(error.message))
       .finally(() => setLoading(false));
-  }, []);
+  }, [idRoomGame]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white pt-20">
