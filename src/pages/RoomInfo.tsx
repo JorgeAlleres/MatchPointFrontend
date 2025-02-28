@@ -74,7 +74,7 @@ function RoomInfo() {
 
         // Actualizar el estado con la sala actualizada
         setRoom(result);
-        setShowCode(true); // Mostrar el código después de unirse
+        setShowCode(false); // Esconder el código después de salirse
       } catch (error) {
         setError(error instanceof Error ? error.message : "Error desconocido");
       }
