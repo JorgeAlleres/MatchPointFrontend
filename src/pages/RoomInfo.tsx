@@ -41,6 +41,10 @@ function RoomInfo() {
         setLoading(false);
       }
     };
+    // Llamar a la api y sacar los usuario que pertenecen a la sala por roomId
+    // Recorrer el array que recoja los users para comprobar si pertenece a la sala
+    // Si pertenece que pueda salirse, si no pertenece que pueda unirse
+    // Contar los users y guardarlo en variable para generar bolas en rojo
     getRoomInfo();
     getGameInfo();
   }, [id, idRoomGame, room?.capacity]);
@@ -48,6 +52,8 @@ function RoomInfo() {
   const handleJoin = async () => {
     if (room && room.capacity > 0) {
       try {
+        // LLamar al backend e insertar el join de userId, roomId
+
         // Disminuir la capacidad y actualizar la sala
         const updatedRoom = { ...room, capacity: room.capacity - 1 };
         const result = await RoomService.update(Number(id), updatedRoom);
@@ -66,6 +72,8 @@ function RoomInfo() {
   const handleLeave = async () => {
     if (room && game && room.capacity < game?.maxCapacity) {
       try {
+        // Llamar al backend (leave) y borrar el dato del user asociado a esta sala
+
         // Aumentar la capacidad y actualizar la sala
         const updatedRoom = { ...room, capacity: room.capacity + 1 };
         const result = await RoomService.update(Number(id), updatedRoom);
@@ -101,6 +109,7 @@ function RoomInfo() {
         )}
       </div>
       <span>
+        {/* Cambiar la logica, debe ser maxCapacity(total de bolas), capacidad(bolas en verde), totalUsers(bolas en rojo) */}
         {
           room.capacity >= 0 && game?.maxCapacity && game.maxCapacity > 0 ? (
             <div className="flex items-center">
