@@ -1,11 +1,12 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
-import { AuthService } from '../services/auth.service'
+import { useAuth } from '../contexts/AuthContext'
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
 
   const navigate = useNavigate()
+  const {login} = useAuth()
 
   const [form, setForm] = useState(
     {
@@ -18,7 +19,8 @@ function Login() {
     e.preventDefault()
     // mensaje por post al api del backend
     try {
-      await AuthService.loginUser(form.email, form.password)
+      //await AuthService.loginUser(form.email, form.password)
+      await login(form.email, form.password) // llamada al contexto
       toast('✅ Login Successful')
       navigate('/')
       {/*TODO Detectar si el usuario es admin y enviarlo al home para admins*/}
