@@ -1,12 +1,12 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useAuth } from '../contexts/AuthContext'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
 
   const navigate = useNavigate()
-  const {login} = useAuth()
+  const { login } = useAuth()
 
   const [form, setForm] = useState(
     {
@@ -22,8 +22,8 @@ function Login() {
       //await AuthService.loginUser(form.email, form.password)
       await login(form.email, form.password) // llamada al contexto
       toast('✅ Login Successful')
-      navigate('/')
-      {/*TODO Detectar si el usuario es admin y enviarlo al home para admins*/}
+      navigate('/home')
+      {/*TODO Detectar si el usuario es admin y enviarlo al home para admins*/ }
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Unknown Error'
       toast(msg)
@@ -64,14 +64,6 @@ function Login() {
             required
           />
         </div>
-        <div className="flex items-center mb-4">
-          <input
-            type="checkbox"
-            id="remember"
-            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-          />
-          <label htmlFor="remember" className="ml-2 text-sm text-gray-600">Recuérdame</label>
-        </div>
         {/*TODO Implementar las burbujas para acceder con google, github, ...*/}
         <button
           type="submit"
@@ -80,7 +72,7 @@ function Login() {
           Iniciar Sesión
         </button>
         <p className="mt-4 text-center text-sm text-gray-600">
-          ¿No tienes cuenta? <a href="/register" className="text-indigo-600 hover:underline">Regístrate aquí</a>
+          ¿No tienes cuenta? <Link to="/register" className="text-indigo-600 hover:underline">Regístrate aquí</Link>
         </p>
       </form>
     </div>
