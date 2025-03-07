@@ -10,8 +10,8 @@ function Navbar() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const {isAdmin} = useAuth();
-  const {isAuthenticated} = useAuth()
+  const {isAdmin, isAuthenticated, user} = useAuth()
+  const {id, email, avatar} = user || {}
 
   useEffect(() => {
     GameService.getAll()
@@ -23,8 +23,8 @@ function Navbar() {
         const msg = error instanceof Error ? error.message : 'Error desconocido';
         setMessage(msg);
         setLoading(false);
-      });
-  }, []);
+      })
+  }, [])
 
   const handleGameChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedGameId = event.target.value;
@@ -84,11 +84,12 @@ function Navbar() {
           {/* Sección derecha */}
           <div className="flex-1 flex justify-end">
             <Link
-              to="/profile"
+              to={`/profile/${id}`}
               className="py-2 px-4 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
             >
-              Profile
+              {email}
             </Link>
+            <p>{avatar}</p>
           </div>
         </div>
       }
