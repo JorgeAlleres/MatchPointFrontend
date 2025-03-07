@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { AuthService } from '../services/auth.service'
 import toast from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import avatarPorDefecto from '../assets/avatarPorDefecto.png'
 import avatar1 from '../assets/avatar1.png'
 import avatar2 from '../assets/avatar2.png'
@@ -50,7 +50,7 @@ function Register() {
     try {
       await AuthService.registerUser(user)
       toast.success('Registro exitoso')
-      navigate('/login')
+      navigate('/')
     } catch (error) {
       const msg = error instanceof Error ? error.message : 'Error desconocido'
       toast.error(msg)
@@ -172,7 +172,7 @@ function Register() {
           Registrarse
         </button>
         <p className="mt-4 text-center text-sm text-gray-400">
-          ¿Ya tienes una cuenta? <a href="/login" className="text-indigo-400 hover:underline">Inicia sesión aquí</a>
+          ¿Ya tienes una cuenta? <Link to="/" className="text-indigo-400 hover:underline">Inicia sesión aquí</Link>
         </p>
       </form>
     </div>
