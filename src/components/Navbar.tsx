@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { GameService } from '../services/game.service';
 import Game from '../models/Game';
+import { useAuth } from '../contexts/AuthContext';
 
 function Navbar() {
   const [games, setGames] = useState<Game[]>([]);
@@ -9,10 +10,8 @@ function Navbar() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const isAdmin = false;
-  {/* TODO: Implementar si el usuario es Admin o no */ }
-  const isAuthenticate = true
-  {/* TODO: Implementar si el usuario esta Autenticado o no */ }
+  const {isAdmin} = useAuth();
+  const {isAuthenticated} = useAuth()
 
   useEffect(() => {
     GameService.getAll()
@@ -38,7 +37,7 @@ function Navbar() {
 
   return (
     <nav className="bg-gray-900 text-white fixed w-full top-0 left-0 z-50 border-b border-gray-700">
-      {isAuthenticate &&
+      {isAuthenticated &&
         <div className="max-w-screen-xl mx-auto p-4 flex items-center justify-between">
 
           {msg}
