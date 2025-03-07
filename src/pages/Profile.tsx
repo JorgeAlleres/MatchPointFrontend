@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { UserService } from '../services/user.service';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import avatarPorDefecto from '../assets/avatarPorDefecto.png';
+import { useAuth } from '../contexts/AuthContext';
 
 function Profile() {
   const [userName, setUserName] = useState('');
@@ -9,16 +10,19 @@ function Profile() {
   const [avatar, setAvatar] = useState(avatarPorDefecto);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate()
+  const { id } = useParams();
+  const {logout} = useAuth()
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     const confirmDelete = window.confirm('¿Estás seguro de que quieres borrar tu cuenta? Esta acción es irreversible.');
     if (confirmDelete) {
+      await UserService.delete(Number(id))
+      logout()
+      navigate('/')
       alert('Cuenta borrada correctamente.');
-      // TODO: Enviar delete al backend
     }
   };
-
-  const { id } = useParams();
 
   useEffect(() => {
     const getData = async () => {
