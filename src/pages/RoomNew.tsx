@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { RoomService } from '../services/room.service';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GameService } from '../services/game.service';
+import Game from '../models/Game';
 
 function RoomNew() {
   const [queryParams] = useSearchParams();
   const idRoomGame = queryParams.get('idRoomGame');
-  const [gameName, setGameName] = useState('');
+  const [game, setGame] = useState<Game>();
   const [roomName, setRoomName] = useState('');
   const [description, setDescription] = useState('');
   const [capacity, setCapacity] = useState('');
@@ -22,6 +23,10 @@ function RoomNew() {
       alert("Por favor, complete todos los campos obligatorios.");
       return;
     }
+    if(game?.maxCapacity && Number(capacity) > game.maxCapacity) {
+      alert("La capacidad introducida es mayor a la máxima del juego");
+      return;
+    }
     const roomData = {
       idRoomGame: Number(idRoomGame),
       roomName: roomName,
@@ -34,14 +39,14 @@ function RoomNew() {
       RoomService.create(roomData)
       navigate(`/rooms?idRoomGame=${idRoomGame}`)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   };
 
   useEffect(() => {
     // Cargar juegos y mapearlos
     GameService.getById(Number(idRoomGame))
-      .then(data => setGameName(data.gameName))
+      .then(setGame)
       .catch((error) => setError(error.message))
       .finally(() => setLoading(false));
   }, [idRoomGame]);
@@ -54,7 +59,7 @@ function RoomNew() {
           <h2 className="text-2xl font-semibold mb-4 text-center">Crear Sala para</h2>
           {loading && <p>Loading ...</p>}
           {error && <p className="text-red-500">Error: {error}</p>}
-          <h2 className="text-2xl font-semibold mb-4 text-center">Juego: {gameName}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-center">Juego: {game?.gameName}</h2>
           <div className="mb-4">
             <label htmlFor="roomName" className="block text-sm font-bold mb-2">
               Nombre de la sala <span className="text-red-500">*</span>
