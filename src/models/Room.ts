@@ -8,4 +8,5 @@ export default interface Room {
     published: Date
     expired?: Date
     idRoomGame: number
+    idUserCreator: number
 }
