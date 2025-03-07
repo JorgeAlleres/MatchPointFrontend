@@ -10,8 +10,8 @@ function Navbar() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const {isAdmin, isAuthenticated, user} = useAuth()
-  const {id, email, avatar} = user || {}
+  const { logout, isAdmin, isAuthenticated, user } = useAuth()
+  const { id, email, avatar } = user || {}
 
   useEffect(() => {
     GameService.getAll()
@@ -34,14 +34,12 @@ function Navbar() {
   };
 
   if (loading) return <div>Loading...</div>;
+  if (msg) return <div>{msg}</div>;
 
   return (
     <nav className="bg-gray-900 text-white fixed w-full top-0 left-0 z-50 border-b border-gray-700">
       {isAuthenticated &&
         <div className="max-w-screen-xl mx-auto p-4 flex items-center justify-between">
-
-          {msg}
-
           <div className="flex flex-1 justify-start space-x-4">
             {isAdmin ?
               <>
@@ -72,25 +70,48 @@ function Navbar() {
           </div>
 
           {/* Sección central */}
-          <div className="absolute left-1/2 transform -translate-x-1/2">
+          <div className="flex flex-1 justify-center space-x-4">
             <Link
-              to={isAdmin ? '/admin' : '/'}
-              className="py-2 px-4 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+              to={isAdmin ? '/admin' : '/home'}
+              className="py-2 px-4 text-white shadow-md"
             >
               {isAdmin ? 'HOME ADMIN' : 'HOME'}
             </Link>
           </div>
 
           {/* Sección derecha */}
-          <div className="flex-1 flex justify-end">
+          <div className="flex-1 flex items-center justify-end gap-4">
             <Link
               to={`/profile/${id}`}
-              className="py-2 px-4 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+              className="py-2 px-4 text-white shadow-md"
             >
               {email}
             </Link>
-            <p>{avatar}</p>
+            <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white">
+              <img src={avatar} alt="Avatar" className="w-full h-full object-cover" />
+            </div>
+            <button
+              onClick={logout}
+              className="py-2 px-4 text-white shadow-md">
+              Cerrar Sesión
+            </button>
           </div>
+        </div>
+      }
+      {!isAuthenticated &&
+        <div className="max-w-screen-xl mx-auto p-4 flex justify-center gap-5">
+          <Link
+            to={'/'}
+            className="py-2 px-6 text-white bg-blue-500 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            LogIn
+          </Link>
+          <Link
+            to={'/register'}
+            className="py-2 px-6 text-white bg-blue-500 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            Registrarse
+          </Link>
         </div>
       }
     </nav>
