@@ -7,6 +7,7 @@ interface UserPayload{
     id: number
     email: string
     role: string
+    avatar: string
 }
 
 interface AuthContextType{
@@ -47,15 +48,11 @@ export function AuthProvider({children}:{children: React.ReactNode}){
 
     const login = async (email: string, password:string) => {
         try{
-            const a = await AuthService.loginUser(email, password)
+            await AuthService.loginUser(email, password)
             const response = await fetch(API_URL_BASE+'/auth/user', {credentials: 'include'})
-            console.log(response)
             if (!response.ok) throw new Error("No autenticado");
             const data = await response.json()
-            console.log('Usuario logueado:', data)
-            console.log('Usuario logueado token:', a)
             setUser(data)
-            console.log(user)
         }catch(error){
             console.error("Error en el login:", error);
             throw new Error("Error en el login")
