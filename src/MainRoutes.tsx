@@ -22,7 +22,7 @@ function MainRoutes() {
   const location = useLocation()
 
   // Ocultar Navbar en login y registro
-  const hideNavbarUser = ['/login', '/register'].includes(location.pathname)
+  const hideNavbarUser = ['/', '/register'].includes(location.pathname)
 
   return (
     <div className="flex flex-col h-screen">
@@ -30,12 +30,12 @@ function MainRoutes() {
       <div className="container mx-auto flex grow justify-center items-center">
         <Routes>
           {/*Rutas Comunes */}
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/profile/update/:id" element={<ProfileUpdate />} />
           {/*Rutas para User */}
-          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/rooms" element={<RoomList />} />
           <Route path="/rooms/new" element={<RoomNew />} />
           <Route path="/rooms/edit/:id" element={<RoomEdit />} />
