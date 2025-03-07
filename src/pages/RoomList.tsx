@@ -4,6 +4,7 @@ import { RoomService } from '../services/room.service';
 import toast from "react-hot-toast";
 import Room from "../models/Room";
 import { GameService } from "../services/game.service";
+import { useAuth } from "../contexts/AuthContext";
 
 function RoomList() {
     const [rooms, setRooms] = useState<(Room & { gameMaxCapacity?: number })[]>([]);
@@ -14,6 +15,8 @@ function RoomList() {
     const roomNameQuery = queryParams.get("roomName") || "";
     const capacityFilter = queryParams.get("capacity") || "";
     const privacityFilter = queryParams.get("privacity") === "false";  // Convertir "true" o "false"
+    const { user } = useAuth()
+    const { id } = user || {}
 
     useEffect(() => {
         setLoading(true);
@@ -140,7 +143,7 @@ function RoomList() {
                         {
                             room.capacity >= 0 && room.gameMaxCapacity && room.gameMaxCapacity > 0 ? (
                                 <div className="flex items-center">
-                                    {Array.from({ length: room.gameMaxCapacity ?? 0}, (_, index) => (
+                                    {Array.from({ length: room.gameMaxCapacity ?? 0 }, (_, index) => (
                                         <div
                                             key={index}
                                             className={`w-4 h-4 rounded-full mr-1 ${index < room.capacity ? 'bg-green-500' : 'bg-red-500'
@@ -171,19 +174,24 @@ function RoomList() {
                         >
                             Ver
                         </Link>
-                        <Link
-                            to={`/rooms/edit/${room.id}`}
-                            className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-2 inline-block"
-                        >
-                            Editar
-                        </Link>
-                        <button
-                            onClick={() => handleDelete(room.id)}
-                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded inline-block"
-                        >
-                            Borrar
-                        </button>
+                        {id == room.idUserCreator && (
+                            <div className="flex gap-2">
+                                <Link
+                                    to={`/rooms/edit/${room.id}`}
+                                    className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded inline-block"
+                                >
+                                    Editar
+                                </Link>
+                                <button
+                                    onClick={() => handleDelete(room.id)}
+                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded inline-block"
+                                >
+                                    Borrar
+                                </button>
+                            </div>
+                        )}
                     </div>
+
                 </div>
             ))}
         </div>
