@@ -1,31 +1,6 @@
-Register
------------------
--   Implementar funcionalidad al botón recuérdame
-
 Login
 -------------------
 -   Implementar Burbujas de Inicio de sesión con Google y Github
-
-Navbar
---------------------
--   Gestionar variable isAdmin/isAuthenticate
--   Cambiar el Botón de Profile por el nombre de Usuario y una burbuja con el avatar
-
-Profile
-----------------
--   Añadir funcionalidad al botón Borrar Cuenta
-
-GameManager
---------------
--   Restringir Acceso a "SOLO ADMINS"
-
-UserManager
---------------
--   Restringir Acceso a "SOLO ADMINS"
-
-RoomManager
---------------
--   Restringir Acceso a "SOLO ADMINS"
 
 Proyecto Terminado
 --------------------
