@@ -50,6 +50,12 @@ function RoomEditAdmin() {
             return;
         }
 
+        const selectedGame = games.find(game => game.id === selectedGameId);
+        if (selectedGame && capacity > selectedGame.maxCapacity) {
+            alert("La capacidad de la sala no puede ser mayor que la capacidad máxima del juego seleccionado.");
+            return;
+        }
+
         const roomData = {
             roomName,
             description,
@@ -63,7 +69,7 @@ function RoomEditAdmin() {
             await RoomService.update(Number(id), roomData);
             navigate(`/roomsAdmin`);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
 

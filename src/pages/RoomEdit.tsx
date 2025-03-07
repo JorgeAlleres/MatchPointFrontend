@@ -1,23 +1,27 @@
 import { useState, useEffect } from 'react';
 import { RoomService } from '../services/room.service';
 import { useNavigate, useParams } from 'react-router-dom';
+import { GameService } from '../services/game.service';
+import Game from '../models/Game';
 
 function RoomEdit() {
-    const { id } = useParams(); // Para obtener el ID de la sala desde la URL
-    const [idRoomGame, setIdRoomGame] = useState('');
+    const { id } = useParams();
+    const [game, setGame] = useState<Game | null>(null);
+    const [idRoomGame, setIdRoomGame] = useState<number | null>(null);
     const [roomName, setRoomName] = useState('');
     const [description, setDescription] = useState('');
-    const [capacity, setCapacity] = useState('');
+    const [capacity, setCapacity] = useState<number | ''>('');
     const [code, setCode] = useState('');
     const [privateCheck, setPrivateCheck] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    // Cargar los datos de la sala al montar el componente
     useEffect(() => {
-        async function call() {
+        async function fetchRoom() {
             try {
                 const room = await RoomService.getById(Number(id));
-                setIdRoomGame(room.idRoomGame)
+                setIdRoomGame(room.idRoomGame);
                 setRoomName(room.roomName);
                 setDescription(room.description);
                 setCapacity(room.capacity);
@@ -25,11 +29,25 @@ function RoomEdit() {
                 setPrivateCheck(room.private);
             } catch (error) {
                 console.error('Error al cargar los datos de la sala', error);
+            } finally {
+                setLoading(false);
             }
         }
-
-        call();
+        fetchRoom();
     }, [id]);
+
+    useEffect(() => {
+        if (!idRoomGame) return;
+        async function fetchGame() {
+            try {
+                const game = await GameService.getById(Number(idRoomGame));
+                setGame(game);
+            } catch (error) {
+                console.error('Error al cargar los datos del juego', error);
+            }
+        }
+        fetchGame();
+    }, [idRoomGame]);
 
     const handleSubmit = async () => {
         if (!idRoomGame || !roomName || !capacity || !code) {
@@ -37,8 +55,13 @@ function RoomEdit() {
             return;
         }
 
+        if (game?.maxCapacity && Number(capacity) > game.maxCapacity) {
+            alert("La capacidad introducida es mayor a la máxima del juego");
+            return;
+        }
+
         const roomData = {
-            idRoomGame: Number(idRoomGame),
+            idRoomGame,
             roomName,
             description,
             capacity: Number(capacity),
@@ -50,7 +73,7 @@ function RoomEdit() {
             await RoomService.update(Number(id), roomData);
             navigate(`/rooms?idRoomGame=${idRoomGame}`);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
 
@@ -59,7 +82,9 @@ function RoomEdit() {
             <div className="flex flex-col items-center">
                 <div className="p-8 rounded shadow-md w-96">
                     <h2 className="text-2xl font-semibold mb-4 text-center">Editar Sala</h2>
-                    <h2 className="text-2xl font-semibold mb-4 text-center">Juego: {idRoomGame}</h2>
+                    <h2 className="text-2xl font-semibold mb-4 text-center">Juego: {game?.gameName || 'Cargando...'}</h2>
+                    {loading && <p>Loading ...</p>}
+                    {error && <p className="text-red-500">Error: {error}</p>}
                     <div className="mb-4">
                         <label htmlFor="roomName" className="block text-sm font-bold mb-2">
                             Nombre de la sala <span className="text-red-500">*</span>
@@ -95,7 +120,7 @@ function RoomEdit() {
                             id="capacity"
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             value={capacity}
-                            onChange={(e) => setCapacity(e.target.value)}
+                            onChange={(e) => setCapacity(Number(e.target.value))}
                         />
                     </div>
 
