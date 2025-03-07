@@ -24,7 +24,7 @@ function GameNew() {
             await GameService.create(gameData)
             navigate('/gamesAdmin')
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
     };
 

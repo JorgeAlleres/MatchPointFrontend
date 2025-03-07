@@ -56,7 +56,7 @@ function ProfileUpdate() {
       await UserService.update(Number(id), newDataProfile)
       navigate(`/profile/${id}`);
     } catch(error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

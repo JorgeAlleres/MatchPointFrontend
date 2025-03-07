@@ -44,7 +44,7 @@ function GameEdit() {
             await GameService.update(Number(id), gameData);
             navigate(`/gamesAdmin`);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
 

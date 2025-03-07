@@ -48,7 +48,7 @@ function UserEdit() {
             await UserService.update(Number(id), userData);
             navigate('/usersAdmin');
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
 
