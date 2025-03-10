@@ -27,6 +27,8 @@ function ProfileUpdate() {
                   setAvatar(user.avatar)
               } catch (error) {
                   setError('Error al cargar los datos del user');
+              } finally {
+                setLoading(false)
               }
           }
   
@@ -35,6 +37,7 @@ function ProfileUpdate() {
 
   const handleSubmit = async () => {
     // Validaciones básicas
+    setLoading(true)
     if (!userName || !email || !oldPassword || !avatar) {
       toast.error('Por favor, completa todos los campos obligatorios.');
       return;
@@ -59,6 +62,8 @@ function ProfileUpdate() {
       navigate(`/profile/${id}`);
     } catch(error) {
       setError('Error al modificar el usuario');
+    } finally {
+      setLoading(false)
     }
   };
 
