@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { RoomService } from '../services/room.service';
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Room from "../models/Room";
 import { GameService } from "../services/game.service";
 import Game from "../models/Game";
@@ -13,6 +13,7 @@ function RoomInfo() {
   const [error, setError] = useState<string | null>(null);
   const [showCode, setShowCode] = useState(false);
   const [joined, setJoined] = useState(false)
+  const navigate = useNavigate()
 
   const { id } = useParams();
   const [queryParams] = useSearchParams();
@@ -146,6 +147,11 @@ function RoomInfo() {
           </button>
         }
       </div>
+      <button
+        onClick={() => navigate(`/rooms?idRoomGame=${idRoomGame}`)}
+        className="mt-6 px-6 py-2 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition ease-in-out duration-300">
+        Volver
+      </button>
     </div>
   );
 }

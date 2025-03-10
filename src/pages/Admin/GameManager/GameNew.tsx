@@ -7,9 +7,12 @@ function GameNew() {
     const [genre, setGenre] = useState('');
     const [platform, setPlatform] = useState('');
     const [maxCapacity, setMaxCapacity] = useState(0);
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
 
     const handleSubmit = async () => {
+        setLoading(true)
         if (!gameName || !genre || !platform || !maxCapacity) {
             alert("Por favor, complete todos los campos obligatorios.");
             return;
@@ -24,7 +27,9 @@ function GameNew() {
             await GameService.create(gameData)
             navigate('/gamesAdmin')
         } catch (error) {
-            console.error(error)
+            setError('Error al crear el juego')
+        } finally {
+            setLoading(false)
         }
     };
 
@@ -34,6 +39,8 @@ function GameNew() {
                 {/* Contenedor principal */}
                 <div className="p-8 rounded shadow-md w-96">
                     <h2 className="text-2xl font-semibold mb-4 text-center">Crear Game</h2>
+                    {loading && <p>Loading ...</p>}
+                    {error && <p className="text-red-500">Error: {error}</p>}
                     <div className="mb-4">
                         <label htmlFor="gameName" className="block text-sm font-bold mb-2">
                             Nombre del Game <span className="text-red-500">*</span>
@@ -97,6 +104,11 @@ function GameNew() {
                         </button>
                     </div>
                 </div>
+                <button
+                    onClick={() => navigate(`/gamesAdmin`)}
+                    className="mt-6 px-6 py-2 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition ease-in-out duration-300">
+                    Volver
+                </button>
             </div>
         </div>
     );

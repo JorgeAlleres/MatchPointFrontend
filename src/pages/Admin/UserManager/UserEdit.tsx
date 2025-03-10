@@ -9,6 +9,8 @@ function UserEdit() {
     const [role, setRole] = useState<string>('');
     const [active, setActive] = useState<boolean>(false);
     const [acceptNotifications, setAcceptNotifications] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -23,7 +25,9 @@ function UserEdit() {
                 setActive(user.active ?? false)
                 setAcceptNotifications(user.acceptNotifications ?? false)
             } catch (error) {
-                console.error('Error al cargar los datos del user', error);
+                setError('Error al cargar los datos del user');
+            } finally {
+                setLoading(false)
             }
         }
 
@@ -48,7 +52,7 @@ function UserEdit() {
             await UserService.update(Number(id), userData);
             navigate('/usersAdmin');
         } catch (error) {
-            console.error(error);
+            setError('Error al modificar el usuario"');
         }
     };
 
@@ -57,6 +61,8 @@ function UserEdit() {
             <div className="flex flex-col items-center">
                 <div className="p-8 rounded shadow-md w-96">
                     <h2 className="text-2xl font-semibold mb-4 text-center">Editar User</h2>
+                    {loading && <p>Loading ...</p>}
+                    {error && <p className="text-red-500">Error: {error}</p>}
 
                     <div className="mb-4">
                         <label htmlFor="userName" className="block text-sm font-bold mb-2">
@@ -132,6 +138,11 @@ function UserEdit() {
                         </button>
                     </div>
                 </div>
+                <button
+                    onClick={() => navigate(`/usersAdmin`)}
+                    className="mt-6 px-6 py-2 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition ease-in-out duration-300">
+                    Volver
+                </button>
             </div>
         </div>
     );
