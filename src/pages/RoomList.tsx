@@ -174,22 +174,22 @@ function RoomList() {
                         >
                             Ver
                         </Link>
-                        {id == room.idUserCreator && (
-                            <div className="flex gap-2">
-                                <Link
-                                    to={`/rooms/edit/${room.id}`}
-                                    className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded inline-block"
-                                >
-                                    Editar
-                                </Link>
-                                <button
-                                    onClick={() => handleDelete(room.id)}
-                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded inline-block"
-                                >
-                                    Borrar
-                                </button>
-                            </div>
-                        )}
+                        {id == room.idUserCreator &&
+                            <Link
+                                to={`/rooms/edit/${room.id}`}
+                                className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-2 inline-block"
+                            >
+                                Editar
+                            </Link>
+                        }
+                        {id == room.idUserCreator &&
+                            <button
+                                onClick={() => handleDelete(room.id)}
+                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded inline-block"
+                            >
+                                Borrar
+                            </button>
+                        }
                     </div>
 
                 </div>
