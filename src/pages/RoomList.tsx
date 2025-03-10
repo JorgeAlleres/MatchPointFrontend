@@ -5,9 +5,10 @@ import toast from "react-hot-toast";
 import Room from "../models/Room";
 import { GameService } from "../services/game.service";
 import { useAuth } from "../contexts/AuthContext";
+import { UserRoomService } from "../services/user_room.service";
 
 function RoomList() {
-    const [rooms, setRooms] = useState<(Room & { gameMaxCapacity?: number })[]>([]);
+    const [rooms, setRooms] = useState<(Room & { gameMaxCapacity?: number; userCount?: number })[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [queryParams, setQueryParams] = useSearchParams();
@@ -31,6 +32,19 @@ function RoomList() {
             .catch((error) => setError(error.message))
             .finally(() => setLoading(false));
     }, [queryParams]);
+
+    useEffect(() => {
+        async function fetchUsersPerRoom() {
+            const updatedRooms = await Promise.all(rooms.map(async (room) => {
+                const countUsers = await UserRoomService.getRoomUserCount(room.id);
+                return { ...room, userCount: countUsers.count }; // Agregar userCount a cada sala
+            }));
+            setRooms(updatedRooms);
+        }
+        if (rooms.length > 0) {
+            fetchUsersPerRoom();
+        }
+    }, [rooms]);
 
 
     const handleSearchChangeName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +84,7 @@ function RoomList() {
     const handleDelete = async (id: number) => {
         if (!window.confirm("¿Estás seguro que quieres borrar esta sala?")) return;
         try {
-            await RoomService.delete(id);
+            await RoomService.delete(id)
             setRooms((prevRooms) => prevRooms?.filter((room) => room.id !== id));
             toast.success("Room successfully deleted");
         } catch (error) {
@@ -140,24 +154,24 @@ function RoomList() {
                     {room.description && <span>Descripcion: {room.description}</span>}
 
                     <span>Capacidad:
-                        {
-                            room.capacity >= 0 && room.gameMaxCapacity && room.gameMaxCapacity > 0 ? (
-                                <div className="flex items-center">
-                                    {Array.from({ length: room.gameMaxCapacity ?? 0 }, (_, index) => (
+                        {room.capacity >= 0 && room.gameMaxCapacity && room.gameMaxCapacity > 0 ? (
+                            <div className="flex items-center gap-2">
+                                <div className="flex">
+                                    {Array.from({ length: room.gameMaxCapacity }, (_, index) => (
                                         <div
                                             key={index}
-                                            className={`w-4 h-4 rounded-full mr-1 ${index < room.capacity ? 'bg-green-500' : 'bg-red-500'
+                                            className={`w-12 h-12 rounded-full mr-2 ${index < (room.userCount ?? 0) ? "bg-red-500" : "bg-green-500"
                                                 }`}
                                         ></div>
                                     ))}
-                                    <span className="ml-2">
-                                        ({room.capacity}/{room.gameMaxCapacity})
-                                    </span>
                                 </div>
-                            ) : (
-                                <div>Capacidad no disponible</div>
-                            )
-                        }
+                                <span className="text-lg font-semibold">
+                                    {room.userCount ?? 0}/{room.gameMaxCapacity}
+                                </span>
+                            </div>
+                        ) : (
+                            <div>Capacidad no disponible</div>
+                        )}
                     </span>
 
 
