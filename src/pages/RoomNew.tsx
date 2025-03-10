@@ -3,6 +3,8 @@ import { RoomService } from '../services/room.service';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GameService } from '../services/game.service';
 import Game from '../models/Game';
+import { UserRoomService } from '../services/user_room.service';
+import { useAuth } from '../contexts/AuthContext';
 
 function RoomNew() {
   const [queryParams] = useSearchParams();
@@ -17,7 +19,10 @@ function RoomNew() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate()
 
-  const handleSubmit = () => {
+  const { user } = useAuth()
+  const userId = user?.id
+
+  const handleSubmit = async () => {
     //TODO Enviar datos al backend para crear la nueva sala
     if (!idRoomGame || !roomName || !capacity || !code) {
       alert("Por favor, complete todos los campos obligatorios.");
@@ -36,7 +41,11 @@ function RoomNew() {
       private: privateCheck
     };
     try {
-      RoomService.create(roomData)
+      const room = await RoomService.create(roomData)
+      const idRoom = room.newRoom.id
+
+      UserRoomService.joinRoom(Number(userId), idRoom, "admin")
+
       navigate(`/rooms?idRoomGame=${idRoomGame}`)
     } catch (error) {
       setError('Error al crear la sala')
