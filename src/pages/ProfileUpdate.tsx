@@ -10,6 +10,8 @@ function ProfileUpdate() {
   const [newPassword, setNewPassword] = useState('');
   const [repeatNewPassword, setRepeatNewPassword] = useState('');
   const [oldPassword, setOldPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const {id} = useParams()
 
   const navigate = useNavigate()
@@ -24,7 +26,7 @@ function ProfileUpdate() {
                   setEmail(user.email ?? '');
                   setAvatar(user.avatar)
               } catch (error) {
-                  console.error('Error al cargar los datos del user', error);
+                  setError('Error al cargar los datos del user');
               }
           }
   
@@ -56,7 +58,7 @@ function ProfileUpdate() {
       await UserService.update(Number(id), newDataProfile)
       navigate(`/profile/${id}`);
     } catch(error) {
-      console.error(error);
+      setError('Error al modificar el usuario');
     }
   };
 
@@ -67,6 +69,8 @@ function ProfileUpdate() {
         {/* Contenedor principal */}
         <div className="p-8 rounded shadow-md w-96">
           <h2 className="text-2xl font-semibold mb-4 text-center">Actualizar Perfil</h2>
+          {loading && <p>Loading ...</p>}
+          {error && <p className="text-red-500">Error: {error}</p>}
           <div>
             <div className="mb-4">
               <label htmlFor="userName" className="block text-sm font-bold mb-2">

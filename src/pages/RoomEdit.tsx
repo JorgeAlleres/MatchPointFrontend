@@ -28,7 +28,7 @@ function RoomEdit() {
                 setCode(room.code);
                 setPrivateCheck(room.private);
             } catch (error) {
-                console.error('Error al cargar los datos de la sala', error);
+                setError('Error al cargar los datos de la sala');
             } finally {
                 setLoading(false);
             }
@@ -43,7 +43,7 @@ function RoomEdit() {
                 const game = await GameService.getById(Number(idRoomGame));
                 setGame(game);
             } catch (error) {
-                console.error('Error al cargar los datos del juego', error);
+                setError('Error al cargar los datos del juego');
             }
         }
         fetchGame();
@@ -73,7 +73,7 @@ function RoomEdit() {
             await RoomService.update(Number(id), roomData);
             navigate(`/rooms?idRoomGame=${idRoomGame}`);
         } catch (error) {
-            console.error(error);
+            setError('Error al modificar la sala');
         }
     };
 
@@ -161,6 +161,11 @@ function RoomEdit() {
                         </button>
                     </div>
                 </div>
+                <button
+                    onClick={() => navigate(`/rooms?idRoomGame=${idRoomGame}`)}
+                    className="mt-6 px-6 py-2 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition ease-in-out duration-300">
+                    Volver
+                </button>
             </div>
         </div>
     );
