@@ -2,15 +2,13 @@ Login
 -------------------
 -   Implementar Burbujas de Inicio de sesión con Google y Github
 
-RoomNew
+RoomList
 -------------------
--   Al crear la sala debes de registrarte en la tabla User_Room como 'admin'
+-   Las bolas de ocupacion estan mal implementadas
 
 RoomInfo
 -------------------
--   Al unirse a la sala debes de registrarte en la tabla User_Room como 'player'
--   Al salirse de la sala debes de borrarte en la tabla User_Room
--   Calcular las bolas de espacios según la maxCapacity - count(users con la el id de la sala)
+-   Las bolas de ocupacion estan mal implementadas
 
 Proyecto Terminado
 --------------------
