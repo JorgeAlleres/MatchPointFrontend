@@ -7,6 +7,7 @@ import Game from "../models/Game";
 import toast from "react-hot-toast";
 import { useAuth } from "../contexts/AuthContext";
 import { GameService } from "../services/game.service";
+import User from "../models/User";
 
 function RoomInfo() {
   const [room, setRoom] = useState<Room | null>(null);
@@ -39,8 +40,8 @@ function RoomInfo() {
         setUserCount(countUsers.count)
 
         const users = await UserRoomService.getRoomUsers(Number(id));
-        setJoined(users.some((user: any) => {
-          return user.idUser === userId;
+        setJoined(users.some((user: User) => {
+          return user.id === userId;
         }));
       } catch (error) {
         setError("Error al obtener la información");
@@ -64,6 +65,7 @@ function RoomInfo() {
         setShowCode(true);
       } catch (error) {
         toast.error("Error al unirse a la sala");
+        console.error(error)
       }
     } else {
       toast.error("La sala está llena");
@@ -79,6 +81,7 @@ function RoomInfo() {
       setShowCode(false);
     } catch (error) {
       toast.error("Error al salir de la sala");
+      console.error(error)
     }
   };
 
@@ -105,7 +108,7 @@ function RoomInfo() {
         {Array.from({ length: game.maxCapacity }, (_, index) => (
           <div
             key={index}
-            className={`w-12 h-12 rounded-full mr-2 ${index < userCount ? "bg-red-500" : "bg-green-500"
+            className={`w-12 h-12 rounded-full mr-2 ${index < userCount + room.capacity ? "bg-red-500" : "bg-green-500"
               }`}
           ></div>
         ))}
