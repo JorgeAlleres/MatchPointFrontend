@@ -160,13 +160,13 @@ function RoomList() {
                                     {Array.from({ length: room.gameMaxCapacity }, (_, index) => (
                                         <div
                                             key={index}
-                                            className={`w-12 h-12 rounded-full mr-2 ${index < (room.userCount ?? 0) ? "bg-red-500" : "bg-green-500"
+                                            className={`w-12 h-12 rounded-full mr-2 ${index < (room.userCount ? room.userCount + room.capacity : 0) ? "bg-red-500" : "bg-green-500"
                                                 }`}
                                         ></div>
                                     ))}
                                 </div>
                                 <span className="text-lg font-semibold">
-                                    {room.userCount ?? 0}/{room.gameMaxCapacity}
+                                    {room.userCount ? room.userCount + room.capacity : 0}/{room.gameMaxCapacity}
                                 </span>
                             </div>
                         ) : (

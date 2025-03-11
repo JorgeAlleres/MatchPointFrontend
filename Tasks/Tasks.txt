@@ -2,14 +2,6 @@ Login
 -------------------
 -   Implementar Burbujas de Inicio de sesión con Google y Github
 
-RoomList
--------------------
--   Las bolas de ocupacion estan mal implementadas
-
-RoomInfo
--------------------
--   Las bolas de ocupacion estan mal implementadas
-
 Proyecto Terminado
 --------------------
 -   Verificar Concordancia de Estilos
