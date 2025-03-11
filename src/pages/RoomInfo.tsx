@@ -56,19 +56,21 @@ function RoomInfo() {
 
 
   const handleJoin = async () => {
-    if (game && userCount < game.maxCapacity) {
-      try {
-        await UserRoomService.joinRoom(Number(userId), Number(id), "player");
-        toast.success("Te has unido a la sala correctamente ✔️");
-        setJoined(true);
-        setUserCount((prev) => prev + 1);
-        setShowCode(true);
-      } catch (error) {
-        toast.error("Error al unirse a la sala");
-        console.error(error)
+    try {
+      if (game && room && userCount + room?.capacity >= game.maxCapacity)
+        throw new Error('La sala esta llena')
+      await UserRoomService.joinRoom(Number(userId), Number(id), "player");
+      toast.success("Te has unido a la sala correctamente ✔️");
+      setJoined(true);
+      setUserCount((prev) => prev + 1);
+      setShowCode(true);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Ocurrió un error desconocido");
       }
-    } else {
-      toast.error("La sala está llena");
+      console.error(error);
     }
   };
 
